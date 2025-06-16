@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>แบบประเมินการสอน</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body { 
+      font-family: 'Kanit', sans-serif; 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+    }
+    
+    .container { 
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      padding: 2.5rem;
+      border-radius: 25px;
+      max-width: 700px;
+      width: 95%;
+      box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(255, 255, 255, 0.3);
+      position: relative;
+      z-index: 1;
+      animation: slideUp 0.8s ease-out;
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .logo {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 1rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+    
+    .logo i {
+      font-size: 1.8rem;
+      color: white;
+    }
+    
+    h2 { 
+      color: #2d3748;
+      margin: 0;
+      font-weight: 700;
+      font-size: 1.8rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    /* Certificate Warning */
+    .certificate-warning {
+      background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .warning-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      display: block;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { 
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% { 
+        transform: scale(1.05);
+        opacity: 0.8;
+      }
+    }
+    
+    .warning-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .warning-subtext {
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Progress Indicator */
+    .progress-indicator {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 4px;
+    }
+    
+    .progress-text {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #6b7280;
+      font-weight: 500;
+    }
+    
+    /* Duplicate Warning */
+    .duplicate-warning {
+      background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+      color: #856404;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      border: 2px solid #ffc107;
+      display: none;
+    }
+    
+    .duplicate-warning i {
+      margin-right: 0.5rem;
+    }
+    
+    .form-group { 
+      margin-bottom: 1.8rem;
+    }
+    
+    label { 
+      display: block;
+      margin-bottom: 0.8rem;
+      color: #2d3748;
+      font-weight: 600;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    label i {
+      color: #667eea;
+      width: 20px;
+    }
+    
+    select, input[type="text"], textarea { 
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      background: #ffffff;
+      transition: all 0.15s ease;
+      outline: none;
+    }
+    
+    select:hover, input[type="text"]:hover, textarea:hover {
+      border-color: #a0aec0;
+    }
+    
+    select:focus, input[type="text"]:focus, textarea:focus { 
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .instructor-display {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      border: 2px dashed #cbd5e0;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      min-height: 80px;
+    }
+    
+    .instructor-name {
+      font-weight: 600;
+      color: #2d3748;
+      font-size: 1.1rem;
+    }
+    
+    .instructor-empty {
+      color: #a0aec0;
+      font-style: italic;
+    }
+    
+    .rating-section {
+      background: #f8fafc;
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .rating-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .rating-group { 
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .rating-item {
+      flex: 1;
+      min-width: 70px;
+      text-align: center;
+    }
+    
+    .rating-item input[type="radio"] {
+      display: none;
+    }
+    
+    .rating-label {
+      display: block;
+      padding: 12px 8px;
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-weight: 500;
+      position: relative;
+      user-select: none;
+    }
+    
+    .rating-label:hover {
+      border-color: #667eea;
+      background: #f0f4ff;
+      transform: scale(1.02);
+    }
+    
+    .rating-label:active {
+      transform: scale(0.98);
+    }
+    
+    .rating-item input[type="radio"]:checked + .rating-label {
+      background: #667eea;
+      border-color: #667eea;
+      color: white;
+      transform: scale(1.05);
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    }
+    
+    .rating-number {
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 4px;
+    }
+    
+    .rating-text {
+      font-size: 0.75rem;
+      opacity: 0.8;
+    }
+    
+    .rating-item input[type="radio"]:checked + .rating-label .rating-text {
+      opacity: 1;
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+    
+    .submit-section {
+      text-align: center;
+      margin-top: 2rem;
+    }
+    
+    button[type="submit"] { 
+      width: 100%;
+      padding: 16px 24px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+      transition: all 0.15s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    button[type="submit"]:hover {
+      background: #5a6fd8;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    button[type="submit"]:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 6px rgba(102, 126, 234, 0.2);
+    }
+    
+    button[type="submit"]:disabled { 
+      background: #a0aec0;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    button[type="submit"]:disabled:hover {
+      background: #a0aec0;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    #message-box {
+      padding: 1rem;
+      border-radius: 12px;
+      margin-top: 1.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      display: none;
+      text-align: center;
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .success {
+      color: #22c55e;
+      background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+      border: 2px solid #22c55e;
+    }
+    
+    .error {
+      color: #ef4444;
+      background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+      border: 2px solid #ef4444;
+    }
+    
+    #success-container {
+      display: none;
+      text-align: center;
+      animation: celebration 0.8s ease-out;
+    }
+    
+    @keyframes celebration {
+      0% {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    .success-icon {
+      font-size: 4rem;
+      color: #22c55e;
+      margin-bottom: 1rem;
+      animation: fadeIn 1s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    .success-text {
+      font-size: 1.3rem;
+      color: #22c55e;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .success-subtext {
+      color: #6b7280;
+      margin-bottom: 1rem;
+    }
+    
+    .closing-message {
+      color: #8b5cf6;
+      font-size: 1rem;
+      font-weight: 500;
+      margin-top: 1rem;
+      animation: pulse 1s ease-in-out infinite;
+    }
+    
+    /* Back Button */
+    .back-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: #667eea;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .back-button:hover {
+      transform: scale(1.1);
+      background: white;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.5rem;
+        margin: 1rem;
+      }
+      
+      .rating-group {
+        gap: 6px;
+      }
+      
+      .rating-item {
+        min-width: 60px;
+      }
+      
+      .rating-label {
+        padding: 10px 6px;
+        font-size: 0.9rem;
+      }
+      
+      .rating-number {
+        font-size: 1rem;
+      }
+      
+      .rating-text {
+        font-size: 0.7rem;
+      }
+      
+      .certificate-warning {
+        padding: 1rem;
+      }
+      
+      .warning-text {
+        font-size: 1rem;
+      }
+      
+      button[type="submit"] {
+        padding: 14px 20px;
+        font-size: 1rem;
+      }
+      
+      .back-button {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        padding: 1rem;
+      }
+      
+      h2 {
+        font-size: 1.5rem;
+      }
+      
+      .rating-group {
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      .rating-item {
+        min-width: auto;
+      }
+      
+      .rating-label {
+        padding: 12px;
+        text-align: center;
+      }
+      
+      .back-button {
+        top: 15px;
+        left: 15px;
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Back Button -->
+  <button class="back-button" onclick="goBack()" title="กลับไปหน้าหลัก">
+    <i class="fas fa-arrow-left"></i>
+  </button>
+
+  <div class="container">
+    <div class="header">
+      <div class="logo">
+        <i class="fas fa-clipboard-check"></i>
+      </div>
+      <h2>แบบประเมินการสอน</h2>
+    </div>
+    
+    <!-- Certificate Warning -->
+    <div class="certificate-warning">
+      <i class="fas fa-exclamation-triangle warning-icon"></i>
+      <div class="warning-text">⚠️ ข้อมูลสำคัญ ⚠️</div>
+      <div class="warning-subtext">
+        หากไม่ทำแบบประเมินการสอนให้ครบทุกครั้ง<br>
+        <strong>จะไม่ได้รับใบเกียติบัตร</strong> เมื่อจบหลักสูตร
+      </div>
+    </div>
+
+    <!-- Progress Indicator -->
+    <div class="progress-indicator">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="progress-text" id="progress-text">ขั้นตอนที่ 1 จาก 7: เลือกข้อมูลพื้นฐาน</div>
+    </div>
+
+    <!-- Duplicate Warning -->
+    <div class="duplicate-warning" id="duplicate-warning">
+      <i class="fas fa-exclamation-circle"></i>
+      <strong>คำเตือน:</strong> คุณเคยประเมินช่วงเวลานี้แล้ว ต้องการประเมินซ้ำหรือไม่?
+    </div>
+
+    <form id="evaluationForm">
+      <!-- Selection Dropdowns -->
+      <div class="form-group">
+        <label for="center">
+          <i class="fas fa-map-marker-alt"></i>
+          ศูนย์
+        </label>
+        <select id="center" required>
+          <option value="">เลือกศูนย์</option>
+          <option value="ลาดกระบัง">ลาดกระบัง</option>
+          <option value="บางพลัด">บางพลัด</option>
+          <option value="ระยอง">ระยอง</option>
+          <option value="ศรีราชา">ศรีราชา</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="week">
+          <i class="fas fa-calendar-week"></i>
+          สัปดาห์
+        </label>
+        <select id="week" required>
+          <option value="">เลือกสัปดาห์</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="day">
+          <i class="fas fa-calendar-day"></i>
+          วัน
+        </label>
+        <select id="day" required>
+          <option value="">เลือกวัน</option>
+          <option value="เสาร์">เสาร์</option>
+          <option value="อาทิตย์">อาทิตย์</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="period">
+          <i class="fas fa-clock"></i>
+          ช่วงเวลา
+        </label>
+        <select id="period" required>
+          <option value="">เลือกช่วงเวลา</option>
+          <option value="เช้า">เช้า</option>
+          <option value="บ่าย">บ่าย</option>
+        </select>
+      </div>
+      
+      <!-- Instructor Display -->
+      <div class="form-group">
+        <label>
+          <i class="fas fa-chalkboard-teacher"></i>
+          ผู้สอน
+        </label>
+        <div class="instructor-display">
+          <div class="instructor-name" id="instructor1-display">
+            <span id="instructor1-text" class="instructor-empty">ยังไม่ได้เลือกตารางสอน</span>
+          </div>
+          <div class="instructor-name" id="instructor2-display" style="margin-top: 0.5rem;">
+            <span id="instructor2-text" class="instructor-empty"></span>
+          </div>
+        </div>
+        <input type="hidden" id="instructor1">
+        <input type="hidden" id="instructor2">
+      </div>
+
+      <!-- Rating Sections -->
+      <div class="rating-section">
+        <div class="rating-title">
+          <i class="fas fa-lightbulb"></i>
+          1. ความชัดเจนในการสอน
+        </div>
+        <div class="rating-group">
+          <div class="rating-item">
+            <input type="radio" id="clarity_1" name="clarity" value="1" required>
+            <label for="clarity_1" class="rating-label">
+              <span class="rating-number">1</span>
+              <span class="rating-text">น้อยที่สุด</span>
+            </label>
+          </div>
+          <div class="rating-item">
+            <input type="radio" id="clarity_2" name="clarity" value="2">
+            <label for="clarity_2" class="rating-label">
+              <span class="rating-number">2</span>
+              <span class="rating-text">น้อย</span>
+            </label>
+          </div>
+          <div class="rating-item">
+            <input type="radio" id="clarity_3" name="clarity" value="3">
+            <label for="clarity_3" class="rating-label">
+              <span class="rating-number">3</span>
+              <span class="rating-text">ปานกลาง</span>
+            </label>
+          </div>
+          <div class="rating-item">
+            <input type="radio" id="clarity_4" name="clarity" value="4">
+            <label for="clarity_4" class="rating-label">
+              <span class="rating-number">4</span>
+              <span class="rating-text">มาก</span>
+            </label>
+          </div>
+          <div class="rating-item">
+            <input type="radio" id="clarity_5" name="clarity" value="5">
+            <label for="clarity_5" class="rating-label">
+              <span class="rating-number">5</span>
+              <span class="rating-text">มากที่สุด</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="rating-section">
+        <div class="rating-title">
+          <i class="fas fa-tasks"></i>
+          2. การเตรียมการสอน
+        </div>
+        <div class="rating-group">
+          <div class="rating-item">
+            <input type="radio" id="preparation_1" name="preparation" value="1" required>
+            <label for="preparation_1" class="rating-label">
+              <span class="rating-number">1</span>
+              <span class="rating-text">น้อยที่สุด</span>
+            </label>
+          </div>
+          <div class="rating-item">
+            <input type="radio" id="preparation_2" name="preparation" value="2">
+            <label for="preparation_2" class="rating-label">
+              <span class="rating-number">2</span>
+              <span class="rating-text">น้อย</span>
+            </label>
+          </div>
+          <div class="rating-item">
+            <input type="radio" id="preparation_3" name="preparation" value="3">
+            <label for="preparation_3" class="rating-label">
+              <span class="rating-number">3</span>
+              <span class="rating-text">ปานกลาง</span>
+            </label>
+          </div>
+          <div class="rating-item">
+            <input type="radio" id="preparation_4" name="preparation" value="4">
+            <label for="preparation_4" class="rating-label">
+              <span class="rating-number">4</span>
+              <span class="rating-text">มาก</span>
+            </label>
+          </div>
+          <div class="rating-item">
+            <input type="radio" id="preparation_5" name="preparation" value="5">
+            <label for="preparation_5" class="rating-label">
+              <span class="rating-number">5</span>
+              <span class="rating-text">มากที่สุด</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="rating-section">
+        <div class="rating-title">
+          <i class="fas fa-comments"></i>
+          3. การมีปฏิสัมพันธ์กับผู้เรียน
+        </div>
+        <div class="rating-group">
+          <div class="rating-item">
+            <input type="radio" id="interaction_1" name="interaction" value="1" required>
+            <label for="interaction_1" class="rating-label">
+              <span class="rating-number">1</span>
+              <span class="rating-text">น้อยที่สุด</span>
+            </label>
+          </div>
+          <div class="rating-item">
+            <input type="radio" id="interaction_2" name="interaction" value="2">
+            <label for="interaction_2" class="rating-label">
+              <span class="rating-number">2</span>
+              <span class="rating-text">น้อย</span>
+            </label>
+          </div>
+          <div class="rating-item">
+            <input type="radio" id="interaction_3" name="interaction" value="3">
+            <label for="interaction_3" class="rating-label">
+              <span class="rating-number">3</span>
+              <span class="rating-text">ปานกลาง</span>
+            </label>
+          </div>
+          <div class="rating-item">
+            <input type="radio" id="interaction_4" name="interaction" value="4">
+            <label for="interaction_4" class="rating-label">
+              <span class="rating-number">4</span>
+              <span class="rating-text">มาก</span>
+            </label>
+          </div>
+          <div class="rating-item">
+            <input type="radio" id="interaction_5" name="interaction" value="5">
+            <label for="interaction_5" class="rating-label">
+              <span class="rating-number">5</span>
+              <span class="rating-text">มากที่สุด</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="rating-section">
+        <div class="rating-title">
+          <i class="fas fa-clock"></i>
+          4. การตรงต่อเวลา
+        </div>
+        <div class="rating-group">
+          <div class="rating-item">
+            <input type="radio" id="punctuality_1" name="punctuality" value="1" required>
+            <label for="punctuality_1" class="rating-label">
+              <span class="rating-number">1</span>
+              <span class="rating-text">น้อยที่สุด</span>
+            </label>
+          </div>
+          <div class="rating-item">
+            <input type="radio" id="punctuality_2" name="punctuality" value="2">
+            <label for="punctuality_2" class="rating-label">
+              <span class="rating-number">2</span>
+              <span class="rating-text">น้อย</span>
+            </label>
+          </div>
+          <div class="rating-item">
+            <input type="radio" id="punctuality_3" name="punctuality" value="3">
+            <label for="punctuality_3" class="rating-label">
+              <span class="rating-number">3</span>
+              <span class="rating-text">ปานกลาง</span>
+            </label>
+          </div>
+          <div class="rating-item">
+            <input type="radio" id="punctuality_4" name="punctuality" value="4">
+            <label for="punctuality_4" class="rating-label">
+              <span class="rating-number">4</span>
+              <span class="rating-text">มาก</span>
+            </label>
+          </div>
+          <div class="rating-item">
+            <input type="radio" id="punctuality_5" name="punctuality" value="5">
+            <label for="punctuality_5" class="rating-label">
+              <span class="rating-number">5</span>
+              <span class="rating-text">มากที่สุด</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="rating-section">
+        <div class="rating-title">
+          <i class="fas fa-star"></i>
+          5. ความพึงพอใจโดยรวม
+        </div>
+        <div class="rating-group">
+          <div class="rating-item">
+            <input type="radio" id="satisfaction_1" name="satisfaction" value="1" required>
+            <label for="satisfaction_1" class="rating-label">
+              <span class="rating-number">1</span>
+              <span class="rating-text">น้อยที่สุด</span>
+            </label>
+          </div>
+          <div class="rating-item">
+            <input type="radio" id="satisfaction_2" name="satisfaction" value="2">
+            <label for="satisfaction_2" class="rating-label">
+              <span class="rating-number">2</span>
+              <span class="rating-text">น้อย</span>
+            </label>
+          </div>
+          <div class="rating-item">
+            <input type="radio" id="satisfaction_3" name="satisfaction" value="3">
+            <label for="satisfaction_3" class="rating-label">
+              <span class="rating-number">3</span>
+              <span class="rating-text">ปานกลาง</span>
+            </label>
+          </div>
+          <div class="rating-item">
+            <input type="radio" id="satisfaction_4" name="satisfaction" value="4">
+            <label for="satisfaction_4" class="rating-label">
+              <span class="rating-number">4</span>
+              <span class="rating-text">มาก</span>
+            </label>
+          </div>
+          <div class="rating-item">
+            <input type="radio" id="satisfaction_5" name="satisfaction" value="5">
+            <label for="satisfaction_5" class="rating-label">
+              <span class="rating-number">5</span>
+              <span class="rating-text">มากที่สุด</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="comment">
+          <i class="fas fa-comment-alt"></i>
+          ข้อเสนอแนะเพิ่มเติม
+        </label>
+        <textarea id="comment" rows="4" placeholder="กรุณาแสดงความคิดเห็นเพิ่มเติม..."></textarea>
+      </div>
+
+      <div class="submit-section">
+        <button type="submit">
+          <i class="fas fa-paper-plane"></i>
+          ส่งแบบประเมิน
+        </button>
+      </div>
+    </form>
+    
+    <div id="message-box"></div>
+    
+    <div id="success-container">
+      <div class="success-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <div class="success-text">ส่งแบบประเมินเรียบร้อยแล้ว!</div>
+      <div class="success-subtext">ขอบคุณสำหรับการประเมิน การประเมินของคุณจะช่วยพัฒนาคุณภาพการสอน</div>
+      <div class="closing-message">
+        <i class="fas fa-clock"></i>
+        หน้าต่างจะปิดอัตโนมัติใน <span id="countdown">3</span> วินาที...
+      </div>
+    </div>
+  </div>
+
+<script>
+// 🔧 CONFIGURATION - แก้ไข URL ให้ตรงกับระบบของคุณ
+const CONFIG = {
+  API_URL: 'https://script.google.com/macros/s/AKfycbxI1-QQAoSNJa-o_sM3v8ak6x4KxTRybpMjDcX0vrWH6fiUrU-LiuM9KoNm3J8bIMSC/exec',
+  VERSION: '2.0.0',
+  DEBUG_MODE: true
+};
+
+// 🏗️ Application State Management
+class EvaluationApp {
+  constructor() {
+    this.instructorsMap = {};
+    this.currentStep = 1;
+    this.totalSteps = 7;
+    this.submittedEvaluations = this.loadSubmittedEvaluations();
+    
+    this.messageBox = document.getElementById('message-box');
+    this.progressFill = document.getElementById('progress-fill');
+    this.progressText = document.getElementById('progress-text');
+    this.duplicateWarning = document.getElementById('duplicate-warning');
+    
+    this.init();
+  }
+  
+  async init() {
+    console.log('🎓 Evaluation App v' + CONFIG.VERSION + ' - Initializing...');
+    
+    this.setupEventListeners();
+    this.updateProgress();
+    await this.fetchInstructors();
+    
+    console.log('✅ Evaluation App initialized successfully');
+  }
+  
+  setupEventListeners() {
+    // Dropdown change listeners
+    ['center', 'week', 'day', 'period'].forEach(id => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.addEventListener('change', () => {
+          this.updateInstructors();
+          this.updateProgress();
+          this.checkDuplicate();
+        });
+      }
+    });
+    
+    // Rating change listeners
+    const ratingInputs = document.querySelectorAll('input[type="radio"]');
+    ratingInputs.forEach(input => {
+      input.addEventListener('change', () => {
+        this.updateProgress();
+      });
+    });
+    
+    // Comment change listener
+    document.getElementById('comment').addEventListener('input', () => {
+      this.updateProgress();
+    });
+    
+    // Form submission
+    document.getElementById('evaluationForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      this.submitEvaluation();
+    });
+  }
+  
+  updateProgress() {
+    let completedSteps = 0;
+    
+    const basicFields = ['center', 'week', 'day', 'period'];
+    basicFields.forEach(field => {
+      if (document.getElementById(field).value) {
+        completedSteps++;
+      }
+    });
+    
+    if (completedSteps === 4) completedSteps++;
+    
+    const ratingFields = ['clarity', 'preparation', 'interaction', 'punctuality', 'satisfaction'];
+    const ratedFields = ratingFields.filter(field => 
+      document.querySelector(`input[name="${field}"]:checked`)
+    );
+    if (ratedFields.length === ratingFields.length) {
+      completedSteps++;
+    }
+    
+    if (document.getElementById('comment').value.trim()) {
+      completedSteps++;
+    } else if (completedSteps === 6) {
+      completedSteps = 6.5;
+    }
+    
+    const progressPercentage = (completedSteps / this.totalSteps) * 100;
+    this.progressFill.style.width = progressPercentage + '%';
+    
+    let stepText = '';
+    if (completedSteps < 4) {
+      stepText = `ขั้นตอนที่ ${Math.floor(completedSteps) + 1} จาก ${this.totalSteps}: เลือกข้อมูลพื้นฐาน`;
+    } else if (completedSteps === 4) {
+      stepText = `ขั้นตอนที่ 5 จาก ${this.totalSteps}: ตรวจสอบผู้สอน`;
+    } else if (completedSteps === 5) {
+      stepText = `ขั้นตอนที่ 6 จาก ${this.totalSteps}: ให้คะแนนประเมิน`;
+    } else if (completedSteps >= 6) {
+      stepText = `ขั้นตอนสุดท้าย - พร้อมส่งแบบประเมิน!`;
+    }
+    
+    this.progressText.textContent = stepText;
+    this.currentStep = Math.min(Math.ceil(completedSteps) + 1, this.totalSteps);
+  }
+  
+  async fetchInstructors() {
+    this.showMessage('success', 'กำลังโหลดข้อมูลผู้สอน...');
+    
+    try {
+      const response = await fetch(CONFIG.API_URL, {
+        method: 'POST',
+        redirect: 'follow',
+        body: JSON.stringify({ action: 'getInstructors' }),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      
+      if (data.status === 'success') {
+        this.instructorsMap = data.data || {};
+        this.showMessage('success', 'โหลดข้อมูลผู้สอนเรียบร้อย');
+        
+        setTimeout(() => {
+          this.messageBox.style.display = 'none';
+        }, 2000);
+        
+      } else {
+        throw new Error(data.message || 'API returned error');
+      }
+      
+    } catch (error) {
+      console.error('❌ Failed to fetch instructors:', error);
+      this.showMessage('error', `ไม่สามารถโหลดข้อมูลผู้สอนได้: ${error.message}`);
+      this.instructorsMap = {};
+    }
+  }
+  
+  updateInstructors() {
+    const center = document.getElementById('center').value;
+    const week = document.getElementById('week').value;
+    const day = document.getElementById('day').value;
+    const period = document.getElementById('period').value;
+    
+    const instructor1 = this.instructorsMap[center]?.[week]?.[day]?.[period]?.instructor1 || '';
+    const instructor2 = this.instructorsMap[center]?.[week]?.[day]?.[period]?.instructor2 || '';
+    
+    document.getElementById('instructor1').value = instructor1;
+    document.getElementById('instructor2').value = instructor2;
+    
+    const instructor1Display = document.getElementById('instructor1-text');
+    const instructor2Display = document.getElementById('instructor2-text');
+    const instructor2Container = document.getElementById('instructor2-display');
+    
+    if (center && week && day && period) {
+        if (instructor1) {
+          instructor1Display.textContent = `ผู้สอน 1: ${instructor1}`;
+          instructor1Display.className = 'instructor-name';
+        } else {
+          instructor1Display.textContent = 'ไม่มีข้อมูลผู้สอนสำหรับช่วงเวลานี้';
+          instructor1Display.className = 'instructor-empty';
+        }
+
+        if (instructor2) {
+          instructor2Display.textContent = `ผู้สอน 2: ${instructor2}`;
+          instructor2Display.className = 'instructor-name';
+          instructor2Container.style.display = 'block';
+        } else {
+          instructor2Display.textContent = '';
+          instructor2Container.style.display = 'none';
+        }
+    } else {
+        instructor1Display.textContent = 'ยังไม่ได้เลือกตารางสอน';
+        instructor1Display.className = 'instructor-empty';
+        instructor2Display.textContent = '';
+        instructor2Container.style.display = 'block';
+    }
+  }
+  
+  checkDuplicate() {
+    const center = document.getElementById('center').value;
+    const week = document.getElementById('week').value;
+    const day = document.getElementById('day').value;
+    const period = document.getElementById('period').value;
+    
+    if (center && week && day && period) {
+      const evaluationKey = `${center}_${week}_${day}_${period}`;
+      
+      if (this.submittedEvaluations.includes(evaluationKey)) {
+        this.duplicateWarning.style.display = 'block';
+        this.duplicateWarning.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        this.duplicateWarning.style.display = 'none';
+      }
+    } else {
+      this.duplicateWarning.style.display = 'none';
+    }
+  }
+  
+  loadSubmittedEvaluations() {
+    try {
+      return JSON.parse(localStorage.getItem('submittedEvaluations') || '[]');
+    } catch (error) {
+      console.error('Failed to load submitted evaluations:', error);
+      return [];
+    }
+  }
+  
+  saveSubmittedEvaluation(center, week, day, period) {
+    try {
+      const evaluationKey = `${center}_${week}_${day}_${period}`;
+      
+      if (!this.submittedEvaluations.includes(evaluationKey)) {
+        this.submittedEvaluations.push(evaluationKey);
+        localStorage.setItem('submittedEvaluations', JSON.stringify(this.submittedEvaluations));
+      }
+    } catch (error) {
+      console.error('Failed to save submitted evaluation:', error);
+    }
+  }
+  
+  async submitEvaluation() {
+    console.log('=== SUBMITTING EVALUATION ===');
+    
+    this.messageBox.style.display = 'none';
+    
+    const payload = { action: 'submitEvaluation' };
+    const requiredRatings = ['clarity', 'preparation', 'interaction', 'punctuality', 'satisfaction'];
+    
+    payload.center = document.getElementById('center').value;
+    payload.week = document.getElementById('week').value;
+    payload.day = document.getElementById('day').value;
+    payload.period = document.getElementById('period').value;
+    payload.instructor1 = document.getElementById('instructor1').value;
+    payload.instructor2 = document.getElementById('instructor2').value;
+    payload.comment = document.getElementById('comment').value;
+    
+    if (!payload.center || !payload.week || !payload.day || !payload.period) {
+      return this.showMessage('error', 'กรุณาเลือกข้อมูลให้ครบถ้วน (ศูนย์, สัปดาห์, วัน, ช่วงเวลา)');
+    }
+    
+    if (!payload.instructor1 && !payload.instructor2) {
+      return this.showMessage('error', 'กรุณาเลือกตารางสอนที่มีผู้สอน');
+    }
+    
+    let allRatingsProvided = true;
+    requiredRatings.forEach(rating => {
+      const checkedRadio = document.querySelector(`input[name="${rating}"]:checked`);
+      if (checkedRadio) {
+        payload[rating] = parseInt(checkedRadio.value);
+      } else {
+        allRatingsProvided = false;
+      }
+    });
+    
+    if (!allRatingsProvided) {
+      return this.showMessage('error', 'กรุณาให้คะแนนให้ครบทุกหัวข้อ (5 หัวข้อ)');
+    }
+    
+    const submitBtn = document.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังส่ง...';
+    
+    try {
+      const response = await fetch(CONFIG.API_URL, {
+        method: 'POST',
+        redirect: 'follow',
+        body: JSON.stringify(payload),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP Error ${response.status}: ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      
+      if (data.status !== 'success') {
+        throw new Error(data.message || 'Unknown error occurred');
+      }
+      
+      console.log('✅ Evaluation submitted successfully!');
+      this.saveSubmittedEvaluation(payload.center, payload.week, payload.day, payload.period);
+      this.showSuccessAndClose();
+      
+    } catch (error) {
+      console.error('❌ Submission failed:', error);
+      let errorMessage = `เกิดข้อผิดพลาดในการส่งข้อมูล: ${error.message}\n\n🔧 วิธีแก้ไข:\n1. ตรวจสอบการเชื่อมต่ออินเทอร์เน็ต\n2. ลองส่งใหม่อีกครั้ง\n3. หากยังไม่ได้ ให้ติดต่อผู้ดูแลระบบ`;
+      this.showMessage('error', errorMessage);
+      
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalText;
+    }
+  }
+  
+  showMessage(type, message) {
+    this.messageBox.className = type;
+    this.messageBox.textContent = message;
+    this.messageBox.style.display = 'block';
+  }
+  
+  showSuccessAndClose() {
+    document.getElementById('evaluationForm').style.display = 'none';
+    document.getElementById('success-container').style.display = 'block';
+    
+    let countdown = 3;
+    const countdownElement = document.getElementById('countdown');
+    
+    const timer = setInterval(() => {
+      countdown--;
+      countdownElement.textContent = countdown;
+      
+      if (countdown <= 0) {
+        clearInterval(timer);
+        this.closeWindow();
+      }
+    }, 1000);
+  }
+  
+  closeWindow() {
+    try {
+      window.close();
+    } catch (e) {
+      window.location.href = 'index.html';
+    }
+  }
+}
+
+function goBack() {
+  if (confirm('คุณต้องการกลับไปหน้าหลักหรือไม่?\n\nข้อมูลที่กรอกจะหายไป')) {
+    window.location.href = 'index.html';
+  }
+}
+
+window.evaluationDebug = {
+  testConnection: async () => {
+    try {
+      const response = await fetch(CONFIG.API_URL, {
+        method: 'POST',
+        redirect: 'follow',
+        body: JSON.stringify({ action: 'getInstructors' }),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+      });
+      const data = await response.json();
+      console.log('Connection test result:', data);
+      return data;
+    } catch (error) {
+      console.error('Connection test failed:', error);
+      return { error: error.message };
+    }
+  },
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('🎓 Teaching Evaluation System v' + CONFIG.VERSION);
+  window.app = new EvaluationApp();
+  console.log('💡 Debug functions available via `evaluationDebug` object in console.');
+});
+
+setInterval(() => {
+  if (window.app && window.app.currentStep > 1) {
+    const formData = {
+      center: document.getElementById('center').value,
+      week: document.getElementById('week').value,
+      day: document.getElementById('day').value,
+      period: document.getElementById('period').value,
+      comment: document.getElementById('comment').value,
+      timestamp: new Date().toISOString()
+    };
+    
+    const ratings = ['clarity', 'preparation', 'interaction', 'punctuality', 'satisfaction'];
+    ratings.forEach(rating => {
+      const checked = document.querySelector(`input[name="${rating}"]:checked`);
+      if (checked) {
+        formData[rating] = checked.value;
+      }
+    });
+    
+    try {
+      localStorage.setItem('evaluation_draft', JSON.stringify(formData));
+    } catch (error) {
+      console.warn('Failed to auto-save form data:', error);
+    }
+  }
+}, 30000);
+
+window.addEventListener('load', () => {
+  try {
+    const draft = localStorage.getItem('evaluation_draft');
+    if (draft && confirm('พบข้อมูลแบบประเมินที่บันทึกไว้ ต้องการโหลดข้อมูลนั้นหรือไม่?')) {
+      const data = JSON.parse(draft);
+      
+      ['center', 'week', 'day', 'period', 'comment'].forEach(field => {
+        if (data[field]) {
+          const element = document.getElementById(field);
+          if (element) {
+            element.value = data[field];
+            element.dispatchEvent(new Event('change'));
+          }
+        }
+      });
+      
+      const ratings = ['clarity', 'preparation', 'interaction', 'punctuality', 'satisfaction'];
+      ratings.forEach(rating => {
+        if (data[rating]) {
+          const radio = document.getElementById(`${rating}_${data[rating]}`);
+          if (radio) {
+            radio.checked = true;
+            radio.dispatchEvent(new Event('change'));
+          }
+        }
+      });
+      
+      localStorage.removeItem('evaluation_draft');
+      console.log('✅ Draft data restored');
+    }
+  } catch (error) {
+    console.warn('Failed to restore draft data:', error);
+  }
+});
+</script>
+</body>
+</html>
