@@ -465,33 +465,6 @@
       animation: pulse 1s ease-in-out infinite;
     }
     
-    /* Back Button */
-    .back-button {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      background: rgba(255, 255, 255, 0.9);
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 1.2rem;
-      color: #667eea;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      transition: all 0.3s ease;
-      z-index: 1000;
-    }
-    
-    .back-button:hover {
-      transform: scale(1.1);
-      background: white;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-    }
-    
     /* Mobile responsiveness */
     @media (max-width: 768px) {
       .container {
@@ -532,12 +505,6 @@
         padding: 14px 20px;
         font-size: 1rem;
       }
-      
-      .back-button {
-        width: 45px;
-        height: 45px;
-        font-size: 1.1rem;
-      }
     }
     
     @media (max-width: 480px) {
@@ -562,23 +529,10 @@
         padding: 12px;
         text-align: center;
       }
-      
-      .back-button {
-        top: 15px;
-        left: 15px;
-        width: 40px;
-        height: 40px;
-        font-size: 1rem;
-      }
     }
   </style>
 </head>
 <body>
-  <!-- Back Button -->
-  <button class="back-button" onclick="goBack()" title="กลับไปหน้าหลัก">
-    <i class="fas fa-arrow-left"></i>
-  </button>
-
   <div class="container">
     <div class="header">
       <div class="logo">
@@ -933,8 +887,8 @@
       <div class="success-text">ส่งแบบประเมินเรียบร้อยแล้ว!</div>
       <div class="success-subtext">ขอบคุณสำหรับการประเมิน การประเมินของคุณจะช่วยพัฒนาคุณภาพการสอน</div>
       <div class="closing-message">
-        <i class="fas fa-clock"></i>
-        หน้าต่างจะปิดอัตโนมัติใน <span id="countdown">3</span> วินาที...
+        <i class="fas fa-times-circle"></i>
+        <a href="index.html" style="color: inherit; text-decoration: none;">กลับไปหน้าหลัก</a>
       </div>
     </div>
   </div>
@@ -943,7 +897,7 @@
 // 🔧 CONFIGURATION - แก้ไข URL ให้ตรงกับระบบของคุณ
 const CONFIG = {
   API_URL: 'https://script.google.com/macros/s/AKfycbxI1-QQAoSNJa-o_sM3v8ak6x4KxTRybpMjDcX0vrWH6fiUrU-LiuM9KoNm3J8bIMSC/exec',
-  VERSION: '2.0.0',
+  VERSION: '2.0.1',
   DEBUG_MODE: true
 };
 
@@ -1232,7 +1186,7 @@ class EvaluationApp {
       
       console.log('✅ Evaluation submitted successfully!');
       this.saveSubmittedEvaluation(payload.center, payload.week, payload.day, payload.period);
-      this.showSuccessAndClose();
+      this.showSuccess();
       
     } catch (error) {
       console.error('❌ Submission failed:', error);
@@ -1251,36 +1205,9 @@ class EvaluationApp {
     this.messageBox.style.display = 'block';
   }
   
-  showSuccessAndClose() {
+  showSuccess() {
     document.getElementById('evaluationForm').style.display = 'none';
     document.getElementById('success-container').style.display = 'block';
-    
-    let countdown = 3;
-    const countdownElement = document.getElementById('countdown');
-    
-    const timer = setInterval(() => {
-      countdown--;
-      countdownElement.textContent = countdown;
-      
-      if (countdown <= 0) {
-        clearInterval(timer);
-        this.closeWindow();
-      }
-    }, 1000);
-  }
-  
-  closeWindow() {
-    try {
-      window.close();
-    } catch (e) {
-      window.location.href = 'index.html';
-    }
-  }
-}
-
-function goBack() {
-  if (confirm('คุณต้องการกลับไปหน้าหลักหรือไม่?\n\nข้อมูลที่กรอกจะหายไป')) {
-    window.location.href = 'index.html';
   }
 }
 
