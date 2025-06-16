@@ -887,8 +887,8 @@
       <div class="success-text">ส่งแบบประเมินเรียบร้อยแล้ว!</div>
       <div class="success-subtext">ขอบคุณสำหรับการประเมิน การประเมินของคุณจะช่วยพัฒนาคุณภาพการสอน</div>
       <div class="closing-message">
-        <i class="fas fa-times-circle"></i>
-        <a href="index.html" style="color: inherit; text-decoration: none;">กลับไปหน้าหลัก</a>
+        <i class="fas fa-clock"></i>
+        หน้าต่างจะปิดอัตโนมัติใน <span id="countdown">3</span> วินาที...
       </div>
     </div>
   </div>
@@ -1186,7 +1186,7 @@ class EvaluationApp {
       
       console.log('✅ Evaluation submitted successfully!');
       this.saveSubmittedEvaluation(payload.center, payload.week, payload.day, payload.period);
-      this.showSuccess();
+      this.showSuccessAndAutoClose();
       
     } catch (error) {
       console.error('❌ Submission failed:', error);
@@ -1205,9 +1205,24 @@ class EvaluationApp {
     this.messageBox.style.display = 'block';
   }
   
-  showSuccess() {
+  showSuccessAndAutoClose() {
     document.getElementById('evaluationForm').style.display = 'none';
     document.getElementById('success-container').style.display = 'block';
+
+    let countdown = 3;
+    const countdownElement = document.getElementById('countdown');
+
+    const timer = setInterval(() => {
+      countdown--;
+      if (countdownElement) {
+        countdownElement.textContent = countdown;
+      }
+      
+      if (countdown <= 0) {
+        clearInterval(timer);
+        window.close();
+      }
+    }, 1000);
   }
 }
 
@@ -1299,4 +1314,4 @@ window.addEventListener('load', () => {
 });
 </script>
 </body>
-</html>
+</ht
