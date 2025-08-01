@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>จัดการข้อมูลผู้สอน</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body { 
+      font-family: 'Kanit', sans-serif; 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+    }
+    
+    .container { 
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      padding: 2.5rem;
+      border-radius: 25px;
+      max-width: 900px;
+      width: 95%;
+      box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(255, 255, 255, 0.3);
+      position: relative;
+      z-index: 1;
+      animation: slideUp 0.8s ease-out;
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .logo {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 1rem;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(245, 87, 108, 0.4);
+    }
+    
+    .logo i {
+      font-size: 1.8rem;
+      color: white;
+    }
+    
+    h2 { 
+      color: #2d3748;
+      margin: 0;
+      font-weight: 700;
+      font-size: 1.8rem;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .admin-info {
+      background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+      border: 2px solid #6366f1;
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    
+    .admin-icon {
+      font-size: 2rem;
+      color: #6366f1;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    
+    .admin-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1e40af;
+      margin-bottom: 0.5rem;
+    }
+    
+    .admin-subtext {
+      font-size: 0.95rem;
+      color: #3730a3;
+      opacity: 0.8;
+    }
+    
+    .info-section {
+      background: #f8fafc;
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .info-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .info-content {
+      color: #4a5568;
+      line-height: 1.6;
+    }
+    
+    .info-content ul {
+      margin: 1rem 0;
+      padding-left: 1.5rem;
+    }
+    
+    .info-content li {
+      margin: 0.5rem 0;
+    }
+    
+    /* System Status */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    
+    .status-item {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+    }
+    
+    .status-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    
+    .status-label {
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+    
+    .status-loading {
+      color: #f59e0b;
+    }
+    
+    .status-success {
+      color: #10b981;
+    }
+    
+    .status-error {
+      color: #ef4444;
+    }
+    
+    /* Quick Actions */
+    .quick-actions {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border: 2px solid #0ea5e9;
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .quick-actions-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #0c4a6e;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .quick-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    
+    .quick-button {
+      background: white;
+      border: 2px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      color: #0c4a6e;
+      font-weight: 500;
+    }
+    
+    .quick-button:hover {
+      background: #0ea5e9;
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    
+    .button {
+      padding: 1rem 1.5rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      color: white;
+      font-family: 'Kanit', sans-serif;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      text-align: center;
+    }
+    
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .button i {
+      font-size: 1.2rem;
+    }
+    
+    .primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+    
+    .primary:hover {
+      box-shadow: 0 12px 30px rgba(102, 126, 234, 0.6);
+    }
+    
+    .secondary {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      box-shadow: 0 8px 20px rgba(79, 172, 254, 0.4);
+    }
+    
+    .secondary:hover {
+      box-shadow: 0 12px 30px rgba(79, 172, 254, 0.6);
+    }
+    
+    .warning {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
+    }
+    
+    .warning:hover {
+      box-shadow: 0 12px 30px rgba(245, 158, 11, 0.6);
+    }
+    
+    .back-button {
+      background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+      box-shadow: 0 8px 20px rgba(100, 116, 139, 0.4);
+    }
+    
+    .back-button:hover {
+      box-shadow: 0 12px 30px rgba(100, 116, 139, 0.6);
+    }
+    
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+    }
+    
+    .modal-content {
+      background-color: white;
+      margin: 5% auto;
+      padding: 2rem;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+      animation: modalSlideIn 0.3s ease-out;
+    }
+    
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .close {
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #6b7280;
+    }
+    
+    .close:hover {
+      color: #374151;
+    }
+    
+    .log-entry {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+    }
+    
+    .log-success {
+      border-left: 4px solid #10b981;
+      background: #ecfdf5;
+    }
+    
+    .log-error {
+      border-left: 4px solid #ef4444;
+      background: #fef2f2;
+    }
+    
+    .log-info {
+      border-left: 4px solid #3b82f6;
+      background: #eff6ff;
+    }
+    
+    .footer {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(113, 128, 150, 0.2);
+      color: #718096;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.5rem;
+        margin: 1rem;
+      }
+      
+      h2 {
+        font-size: 1.5rem;
+      }
+      
+      .button {
+        padding: 0.8rem 1.2rem;
+        font-size: 1rem;
+      }
+      
+      .admin-info {
+        padding: 1rem;
+      }
+      
+      .info-section {
+        padding: 1rem;
+      }
+      
+      .status-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .quick-buttons {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        padding: 1rem;
+      }
+      
+      h2 {
+        font-size: 1.3rem;
+      }
+      
+      .button {
+        padding: 0.7rem 1rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">
+        <i class="fas fa-user-cog"></i>
+      </div>
+      <h2>จัดการข้อมูลผู้สอน</h2>
+    </div>
+    
+    <!-- Admin Info -->
+    <div class="admin-info">
+      <i class="fas fa-shield-alt admin-icon"></i>
+      <div class="admin-text">🔐 สำหรับผู้ดูแลระบบเท่านั้น</div>
+      <div class="admin-subtext">
+        หน้านี้ใช้สำหรับจัดการข้อมูลผู้สอนในระบบประเมินการสอน
+      </div>
+    </div>
+
+    <!-- System Status -->
+    <div class="info-section">
+      <div class="info-title">
+        <i class="fas fa-server"></i>
+        สถานะระบบปัจจุบัน
+      </div>
+      <div class="status-grid">
+        <div class="status-item">
+          <div class="status-value status-loading" id="connection-status">กำลังตรวจสอบ...</div>
+          <div class="status-label">การเชื่อมต่อ</div>
+        </div>
+        <div class="status-item">
+          <div class="status-value status-loading" id="instructor-count">โหลด...</div>
+          <div class="status-label">ข้อมูลผู้สอน</div>
+        </div>
+        <div class="status-item">
+          <div class="status-value status-loading" id="evaluation-count">นับ...</div>
+          <div class="status-label">ข้อมูลประเมิน</div>
+        </div>
+        <div class="status-item">
+          <div class="status-value status-loading" id="last-updated">-</div>
+          <div class="status-label">อัปเดตล่าสุด</div>
+        </div>
+      </div>
+      
+      <div style="margin-top: 1rem; padding: 1rem; background: #f8fafc; border-radius: 8px; font-size: 0.9rem;">
+        <p><strong>🔗 API URL:</strong> <code style="background: #e5e7eb; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.8rem; word-break: break-all;" id="api-url-display">Loading...</code></p>
+        <p><strong>📊 Google Sheets:</strong> <a href="#" id="sheets-link" target="_blank" style="color: #667eea;">เปิดดู Spreadsheet</a></p>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <div class="quick-actions-title">
+        <i class="fas fa-bolt"></i>
+        การดำเนินการด่วน
+      </div>
+      <div class="quick-buttons">
+        <div class="quick-button" onclick="quickRefreshStatus()">
+          <i class="fas fa-sync-alt"></i> รีเฟรชสถานะ
+        </div>
+        <div class="quick-button" onclick="quickHealthCheck()">
+          <i class="fas fa-heartbeat"></i> ตรวจสอบสุขภาพ
+        </div>
+        <div class="quick-button" onclick="quickViewLogs()">
+          <i class="fas fa-list-alt"></i> ดูบันทึกการทำงาน
+        </div>
+        <div class="quick-button" onclick="quickBackupData()">
+          <i class="fas fa-download"></i> สำรองข้อมูล
+        </div>
+      </div>
+    </div>
+
+    <!-- Instructions -->
+    <div class="info-section">
+      <div class="info-title">
+        <i class="fas fa-info-circle"></i>
+        วิธีการจัดการข้อมูลผู้สอน
+      </div>
+      <div class="info-content">
+        <strong>ตัวเลือกการจัดการข้อมูล:</strong>
+        <ul>
+          <li><strong>Google Sheets โดยตรง:</strong> แก้ไขข้อมูลใน Google Sheets ที่เชื่อมต่อกับระบบ</li>
+          <li><strong>Google Apps Script:</strong> ใช้ฟังก์ชันใน Apps Script เพื่ออัปเดตข้อมูล</li>
+          <li><strong>API Testing:</strong> ทดสอบการเชื่อมต่อกับระบบ</li>
+        </ul>
+        
+        <strong>โครงสร้างข้อมูลผู้สอน:</strong>
+        <ul>
+          <li>ศูนย์ (ลาดกระบัง, บางพลัด, ระยอง, ศรีราชา)</li>
+          <li>สัปดาห์ (1-8)</li>
+          <li>วัน (เสาร์, อาทิตย์)</li>
+          <li>ช่วงเวลา (เช้า, บ่าย)</li>
+          <li>ผู้สอน 1 และ ผู้สอน 2</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="button-group">
+      <a href="#" id="sheets-button" target="_blank" class="button primary">
+        <i class="fas fa-table"></i>
+        <span>เปิด Google Sheets</span>
+      </a>
+      
+      <a href="#" id="api-test-button" target="_blank" class="button secondary">
+        <i class="fas fa-database"></i>
+        <span>ทดสอบ API การดึงข้อมูล</span>
+      </a>
+      
+      <button onclick="advancedSystemTest()" class="button secondary">
+        <i class="fas fa-cogs"></i>
+        <span>ทดสอบระบบขั้นสูง</span>
+      </button>
+      
+      <button onclick="exportSystemData()" class="button warning">
+        <i class="fas fa-file-export"></i>
+        <span>ส่งออกข้อมูลระบบ</span>
+      </button>
+      
+      <a href="index.html" class="button back-button">
+        <i class="fas fa-arrow-left"></i>
+        <span>กลับไปหน้าหลัก</span>
+      </a>
+    </div>
+    
+    <div class="footer">
+      <p>© 2025 ระบบประเมินการสอน | สำหรับผู้ดูแลระบบ</p>
+      <p style="font-size: 0.8rem; margin-top: 0.5rem; opacity: 0.7;">
+        Version 2.0.0 | Admin Panel
+      </p>
+    </div>
+  </div>
+
+  <!-- Modal for displaying logs/results -->
+  <div id="logModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h3 id="modal-title">ผลการทำงาน</h3>
+      <div id="modal-body">
+        <!-- Content will be populated by JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 🔧 CONFIGURATION - แก้ไข URLs ให้ตรงกับระบบของคุณ
+    const CONFIG = {
+      API_URL: 'https://script.google.com/macros/s/AKfycbxI1-QQAoSNJa-o_sM3v8ak6x4KxTRybpMjDcX0vrWH6fiUrU-LiuM9KoNm3J8bIMSC/exec',
+      GOOGLE_SHEETS_URL: 'https://docs.google.com/spreadsheets/d/1CBVFQ2_U9nU6fnMhcRjNXG4duBSpLTYvBWLiT3AiJCI/edit',
+      SPREADSHEET_ID: '1TH1AbvtqOgmtCdnGguE_rxZ66Mu9A5JH',
+      VERSION: '2.0.0'
+    };
+
+    // 📊 Admin Dashboard Management
+    class AdminDashboard {
+      constructor() {
+        this.logs = [];
+        this.init();
+      }
+
+      async init() {
+        console.log('🔧 Admin Dashboard v' + CONFIG.VERSION + ' - Initializing...');
+        
+        this.updateUI();
+        await this.checkSystemStatus();
+        
+        console.log('✅ Admin Dashboard initialized successfully');
+      }
+
+      updateUI() {
+        // Update API URL display
+        document.getElementById('api-url-display').textContent = CONFIG.API_URL;
+        
+        // Update Sheets links
+        document.getElementById('sheets-link').href = CONFIG.GOOGLE_SHEETS_URL;
+        document.getElementById('sheets-button').href = CONFIG.GOOGLE_SHEETS_URL;
+        
+        // Update API test link
+        document.getElementById('api-test-button').href = `${CONFIG.API_URL}?action=getInstructors`;
+      }
+
+      async checkSystemStatus() {
+        this.log('info', 'เริ่มตรวจสอบสถานะระบบ...');
+        
+        try {
+          // Test health endpoint
+          const healthResponse = await this.fetchWithTimeout(`${CONFIG.API_URL}?action=health&t=${Date.now()}`, 10000);
+          const healthData = await healthResponse.json();
+          
+          if (healthData.status === 'success') {
+            this.updateStatus('connection-status', 'success', '✅ เชื่อมต่อได้');
+            this.log('success', 'การเชื่อมต่อ: สำเร็จ');
+            
+            // Update last updated time
+            const now = new Date();
+            this.updateStatus('last-updated', 'success', now.toLocaleTimeString('th-TH'));
+            
+            // Get instructor data
+            await this.loadInstructorStatus();
+            
+            // Get evaluation count from health data
+            this.updateEvaluationStatus(healthData);
+            
+          } else {
+            throw new Error(healthData.message || 'Health check failed');
+          }
+          
+        } catch (error) {
+          console.error('❌ System status check failed:', error);
+          this.log('error', 'ตรวจสอบสถานะล้มเหลว: ' + error.message);
+          
+          this.updateStatus('connection-status', 'error', '❌ เชื่อมต่อไม่ได้');
+          this.updateStatus('instructor-count', 'error', 'ไม่ได้');
+          this.updateStatus('evaluation-count', 'error', 'ไม่ได้');
+          this.updateStatus('last-updated', 'error', 'ล้มเหลว');
+        }
+      }
+
+      async loadInstructorStatus() {
+        try {
+          const response = await this.fetchWithTimeout(`${CONFIG.API_URL}?action=getInstructors&t=${Date.now()}`, 10000);
+          const data = await response.json();
+          
+          if (data.status === 'success') {
+            const instructors = data.data || {};
+            const centerCount = Object.keys(instructors).length;
+            let totalSlots = 0;
+            
+            // Count total teaching slots
+            Object.values(instructors).forEach(weeks => {
+              Object.values(weeks).forEach(days => {
+                Object.values(days).forEach(periods => {
+                  Object.values(periods).forEach(() => {
+                    totalSlots++;
+                  });
+                });
+              });
+            });
+            
+            this.updateStatus('instructor-count', 'success', `${centerCount} ศูนย์, ${totalSlots} ช่วง`);
+            this.log('success', `ข้อมูลผู้สอน: ${centerCount} ศูนย์, ${totalSlots} ช่วงการสอน`);
+            
+          } else {
+            throw new Error(data.message || 'Failed to load instructors');
+          }
+          
+        } catch (error) {
+          console.error('❌ Failed to load instructor status:', error);
+          this.log('error', 'โหลดข้อมูลผู้สอนล้มเหลว: ' + error.message);
+          this.updateStatus('instructor-count', 'error', 'โหลดไม่ได้');
+        }
+      }
+
+      updateEvaluationStatus(healthData) {
+        try {
+          const evaluationSheet = healthData.sheets?.find(sheet => sheet.name === 'evaluation');
+          
+          if (evaluationSheet && evaluationSheet.rows > 1) {
+            const count = evaluationSheet.rows - 1; // Subtract header row
+            this.updateStatus('evaluation-count', 'success', `${count} รายการ`);
+            this.log('success', `ข้อมูลประเมิน: ${count} รายการ`);
+          } else {
+            this.updateStatus('evaluation-count', 'success', '0 รายการ');
+            this.log('info', 'ข้อมูลประเมิน: ยังไม่มีข้อมูล');
+          }
+          
+        } catch (error) {
+          console.error('❌ Failed to update evaluation status:', error);
+          this.log('error', 'อัปเดตสถานะประเมินล้มเหลว: ' + error.message);
+          this.updateStatus('evaluation-count', 'error', 'นับไม่ได้');
+        }
+      }
+
+      updateStatus(elementId, type, text) {
+        const element = document.getElementById(elementId);
+        if (element) {
+          element.textContent = text;
+          element.className = `status-value status-${type}`;
+        }
+      }
+
+      async fetchWithTimeout(url, timeout = 5000) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
+        
+        try {
+          const response = await fetch(url, {
+            signal: controller.signal,
+            method: 'GET',
+            headers: { 'Accept': 'application/json' },
+            mode: 'cors',
+            credentials: 'omit',
+            cache: 'no-cache'
+          });
+          
+          clearTimeout(timeoutId);
+          return response;
+          
+        } catch (error) {
+          clearTimeout(timeoutId);
+          throw error;
+        }
+      }
+
+      log(type, message) {
+        const timestamp = new Date().toLocaleString('th-TH');
+        const logEntry = {
+          timestamp,
+          type,
+          message
+        };
+        
+        this.logs.unshift(logEntry); // Add to beginning
+        
+        // Keep only last 50 logs
+        if (this.logs.length > 50) {
+          this.logs = this.logs.slice(0, 50);
+        }
+        
+        console.log(`[${type.toUpperCase()}] ${message}`);
+      }
+
+      showLogs() {
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        
+        modalTitle.textContent = 'บันทึกการทำงานของระบบ';
+        
+        if (this.logs.length === 0) {
+          modalBody.innerHTML = '<p>ยังไม่มีบันทึกการทำงาน</p>';
+        } else {
+          modalBody.innerHTML = this.logs.map(log => 
+            `<div class="log-entry log-${log.type}">
+              <strong>[${log.timestamp}]</strong> ${log.message}
+            </div>`
+          ).join('');
+        }
+        
+        document.getElementById('logModal').style.display = 'block';
+      }
+
+      async performAdvancedTest() {
+        this.log('info', 'เริ่มการทดสอบระบบขั้นสูง...');
+        
+        const tests = [
+          { name: 'Health Check', action: 'health' },
+          { name: 'Get Instructors', action: 'getInstructors' },
+          { name: 'Submit Test Evaluation', action: 'submitEvaluation', method: 'POST' }
+        ];
+        
+        const results = [];
+        
+        for (const test of tests) {
+          try {
+            this.log('info', `ทดสอบ: ${test.name}...`);
+            
+            let response;
+            if (test.method === 'POST') {
+              const testData = {
+                action: 'submitEvaluation',
+                center: 'ลาดกระบัง',
+                week: '1',
+                day: 'เสาร์',
+                period: 'เช้า',
+                instructor1: 'ทดสอบจากแอดมิน',
+                instructor2: '',
+                clarity: 5,
+                preparation: 5,
+                interaction: 5,
+                punctuality: 5,
+                satisfaction: 5,
+                comment: 'ทดสอบขั้นสูงจากหน้าแอดมิน'
+              };
+              
+              response = await fetch(CONFIG.API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(testData)
+              });
+            } else {
+              response = await this.fetchWithTimeout(`${CONFIG.API_URL}?action=${test.action}&t=${Date.now()}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+              results.push(`✅ ${test.name}: สำเร็จ`);
+              this.log('success', `${test.name}: สำเร็จ`);
+            } else {
+              results.push(`❌ ${test.name}: ${data.message || 'ล้มเหลว'}`);
+              this.log('error', `${test.name}: ${data.message || 'ล้มเหลว'}`);
+            }
+            
+          } catch (error) {
+            results.push(`❌ ${test.name}: ${error.message}`);
+            this.log('error', `${test.name}: ${error.message}`);
+          }
+        }
+        
+        // Show results in modal
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        
+        modalTitle.textContent = 'ผลการทดสอบระบบขั้นสูง';
+        modalBody.innerHTML = `
+          <div style="margin-bottom: 1rem;">
+            <strong>ผลการทดสอบ:</strong>
+          </div>
+          ${results.map(result => `<div class="log-entry ${result.includes('✅') ? 'log-success' : 'log-error'}">${result}</div>`).join('')}
+          <div style="margin-top: 1rem; padding: 1rem; background: #f0f9ff; border-radius: 8px;">
+            <strong>📊 สรุป:</strong> ทดสอบ ${tests.length} รายการ เสร็จสิ้น<br>
+            <strong>⏰ เวลา:</strong> ${new Date().toLocaleString('th-TH')}
+          </div>
+        `;
+        
+        document.getElementById('logModal').style.display = 'block';
+        this.log('info', 'การทดสอบระบบขั้นสูงเสร็จสิ้น');
+      }
+
+      async exportData() {
+        this.log('info', 'เริ่มส่งออกข้อมูลระบบ...');
+        
+        try {
+          // Get all data
+          const [healthResponse, instructorsResponse] = await Promise.all([
+            this.fetchWithTimeout(`${CONFIG.API_URL}?action=health`),
+            this.fetchWithTimeout(`${CONFIG.API_URL}?action=getInstructors`)
+          ]);
+          
+          const healthData = await healthResponse.json();
+          const instructorsData = await instructorsResponse.json();
+          
+          const exportData = {
+            timestamp: new Date().toISOString(),
+            system: {
+              version: CONFIG.VERSION,
+              api_url: CONFIG.API_URL,
+              sheets_url: CONFIG.GOOGLE_SHEETS_URL
+            },
+            health: healthData,
+            instructors: instructorsData,
+            logs: this.logs.slice(0, 20) // Last 20 logs
+          };
+          
+          // Create and download file
+          const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `system_export_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.json`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          
+          this.log('success', 'ส่งออกข้อมูลระบบสำเร็จ');
+          alert('✅ ส่งออกข้อมูลระบบเรียบร้อย\n\nไฟล์ถูกดาวน์โหลดแล้ว');
+          
+        } catch (error) {
+          this.log('error', 'ส่งออกข้อมูลล้มเหลว: ' + error.message);
+          alert('❌ ส่งออกข้อมูลล้มเหลว\n\n' + error.message);
+        }
+      }
+    }
+
+    // 🎯 Global Functions
+    let dashboard;
+
+    function quickRefreshStatus() {
+      dashboard.log('info', 'รีเฟรชสถานะ...');
+      dashboard.checkSystemStatus();
+    }
+
+    function quickHealthCheck() {
+      dashboard.log('info', 'ตรวจสอบสุขภาพระบบ...');
+      
+      fetch(`${CONFIG.API_URL}?action=health&t=${Date.now()}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'success') {
+            dashboard.log('success', 'สุขภาพระบบ: ปกติ');
+            alert('✅ ระบบทำงานปกติ\n\n' + JSON.stringify(data, null, 2));
+          } else {
+            dashboard.log('error', 'สุขภาพระบบ: มีปัญหา');
+            alert('⚠️ ระบบมีปัญหา\n\n' + data.message);
+          }
+        })
+        .catch(error => {
+          dashboard.log('error', 'ตรวจสอบสุขภาพล้มเหลว: ' + error.message);
+          alert('❌ ไม่สามารถตรวจสอบสุขภาพระบบได้\n\n' + error.message);
+        });
+    }
+
+    function quickViewLogs() {
+      dashboard.showLogs();
+    }
+
+    function quickBackupData() {
+      if (confirm('คุณต้องการสำรองข้อมูลระบบหรือไม่?\n\nจะดาวน์โหลดไฟล์ข้อมูลระบบทั้งหมด')) {
+        dashboard.exportData();
+      }
+    }
+
+    function advancedSystemTest() {
+      if (confirm('คุณต้องการทดสอบระบบขั้นสูงหรือไม่?\n\nจะทำการทดสอบหลายฟังก์ชัน รวมถึงการส่งข้อมูลทดสอบ')) {
+        dashboard.performAdvancedTest();
+      }
+    }
+
+    function exportSystemData() {
+      dashboard.exportData();
+    }
+
+    function closeModal() {
+      document.getElementById('logModal').style.display = 'none';
+    }
+
+    // 🧪 Global Admin Tools
+    window.adminTools = {
+      getConfig: () => {
+        console.log('Configuration:', CONFIG);
+        return CONFIG;
+      },
+      
+      getDashboard: () => {
+        return dashboard;
+      },
+      
+      checkStatus: () => {
+        return dashboard.checkSystemStatus();
+      },
+      
+      showLogs: () => {
+        dashboard.showLogs();
+      },
+      
+      clearLogs: () => {
+        dashboard.logs = [];
+        console.log('✅ Logs cleared');
+      },
+      
+      testConnection: async () => {
+        try {
+          const response = await fetch(`${CONFIG.API_URL}?action=health`);
+          const data = await response.json();
+          console.log('Connection test result:', data);
+          return data;
+        } catch (error) {
+          console.error('Connection test failed:', error);
+          return { error: error.message };
+        }
+      },
+      
+      testGetInstructors: async () => {
+        try {
+          const response = await fetch(`${CONFIG.API_URL}?action=getInstructors`);
+          const data = await response.json();
+          console.log('Get instructors result:', data);
+          return data;
+        } catch (error) {
+          console.error('Get instructors failed:', error);
+          return { error: error.message };
+        }
+      },
+      
+      testSubmitEvaluation: async () => {
+        const testData = {
+          action: 'submitEvaluation',
+          center: 'ลาดกระบัง',
+          week: '1',
+          day: 'เสาร์',
+          period: 'เช้า',
+          instructor1: 'ทดสอบ Console Admin',
+          instructor2: '',
+          clarity: 4,
+          preparation: 4,
+          interaction: 4,
+          punctuality: 4,
+          satisfaction: 4,
+          comment: 'ทดสอบจาก Admin Console'
+        };
+        
+        try {
+          const response = await fetch(CONFIG.API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(testData)
+          });
+          const data = await response.json();
+          console.log('Submit test result:', data);
+          return data;
+        } catch (error) {
+          console.error('Submit test failed:', error);
+          return { error: error.message };
+        }
+      }
+    };
+
+    // 🚀 Initialize Dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('🔧 Admin Dashboard v' + CONFIG.VERSION + ' - Loading...');
+      console.log('🔗 API URL:', CONFIG.API_URL);
+      console.log('📊 Google Sheets URL:', CONFIG.GOOGLE_SHEETS_URL);
+      
+      dashboard = new AdminDashboard();
+      
+      console.log('💡 Admin Tools Available:');
+      console.log('- adminTools.getConfig()');
+      console.log('- adminTools.getDashboard()');
+      console.log('- adminTools.checkStatus()');
+      console.log('- adminTools.showLogs()');
+      console.log('- adminTools.clearLogs()');
+      console.log('- adminTools.testConnection()');
+      console.log('- adminTools.testGetInstructors()');
+      console.log('- adminTools.testSubmitEvaluation()');
+    });
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('logModal');
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    };
+  </script>
+</body>
+</html>

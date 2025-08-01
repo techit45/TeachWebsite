@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>ระบบประเมินการสอน</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            height: 100%;
+        }
+        
+        body {
+            font-family: 'Kanit', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Animated background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g" cx="50%" cy="50%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.1)"/><stop offset="100%" style="stop-color:rgba(255,255,255,0)"/></radialGradient></defs><circle cx="20" cy="20" r="20" fill="url(%23g)"><animate attributeName="cy" values="20;80;20" dur="3s" repeatCount="indefinite"/></circle><circle cx="80" cy="80" r="15" fill="url(%23g)"><animate attributeName="cy" values="80;20;80" dur="4s" repeatCount="indefinite"/></circle><circle cx="40" cy="60" r="10" fill="url(%23g)"><animate attributeName="cy" values="60;30;60" dur="2s" repeatCount="indefinite"/></circle></svg>') repeat;
+            opacity: 0.3;
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.25),
+                0 0 0 1px rgba(255, 255, 255, 0.3);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            transform: translateY(0);
+            animation: slideIn 0.8s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .logo i {
+            font-size: 2.5rem;
+            color: white;
+        }
+        
+        h1 {
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            color: #718096;
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+        
+        .system-status {
+            background: linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%);
+            border: 2px solid #0288d1;
+            border-radius: 15px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0.5rem 0;
+        }
+        
+        .status-label {
+            color: #01579b;
+            font-weight: 500;
+        }
+        
+        .status-value {
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+        }
+        
+        .status-loading {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .button {
+            padding: 1.5rem 2rem;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            font-family: 'Kanit', sans-serif;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            position: relative;
+            overflow: hidden;
+            transform: translateY(0);
+        }
+        
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .button:hover::before {
+            left: 100%;
+        }
+        
+        .button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .button:active {
+            transform: translateY(-2px);
+        }
+        
+        .button i {
+            font-size: 1.4rem;
+        }
+        
+        .student {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+        
+        .student:hover {
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.6);
+        }
+        
+        .admin {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 15px 35px rgba(245, 87, 108, 0.4);
+        }
+        
+        .admin:hover {
+            box-shadow: 0 20px 40px rgba(245, 87, 108, 0.6);
+        }
+        
+        .sheets {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 15px 35px rgba(79, 172, 254, 0.4);
+        }
+        
+        .sheets:hover {
+            box-shadow: 0 20px 40px rgba(79, 172, 254, 0.6);
+        }
+        
+        .footer {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(113, 128, 150, 0.2);
+            color: #718096;
+            font-size: 0.9rem;
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+                margin: 1rem;
+                border-radius: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .button {
+                padding: 1.2rem 1.5rem;
+                font-size: 1.1rem;
+            }
+            
+            .logo {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .logo i {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            .button {
+                padding: 1rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+        </div>
+        <h1>ระบบประเมินการสอน</h1>
+        <p class="subtitle">ระบบประเมินคุณภาพการสอนออนไลน์</p>
+        
+        <!-- System Status -->
+        <div class="system-status">
+            <div class="status-item">
+                <span class="status-label">🔗 สถานะการเชื่อมต่อ:</span>
+                <span id="connection-status" class="status-value status-loading">กำลังตรวจสอบ...</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">📊 ข้อมูลผู้สอน:</span>
+                <span id="instructor-count" class="status-value status-loading">กำลังโหลด...</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">📝 ข้อมูลประเมิน:</span>
+                <span id="evaluation-count" class="status-value status-loading">กำลังนับ...</span>
+            </div>
+        </div>
+        
+        <div class="button-group">
+            <a href="student-evaluation.html" class="button student">
+                <i class="fas fa-user-graduate"></i>
+                <span>สำหรับนักเรียน: ทำแบบประเมิน</span>
+            </a>
+            <a href="manage-instructors.html" class="button admin">
+                <i class="fas fa-user-cog"></i>
+                <span>สำหรับแอดมิน: จัดการข้อมูลผู้สอน</span>
+            </a>
+            <button onclick="openGoogleSheets()" class="button sheets">
+                <i class="fas fa-chart-bar"></i>
+                <span>ดูข้อมูลสรุป (Google Sheets)</span>
+            </button>
+        </div>
+        
+        <div class="footer">
+            <p>© 2025 ระบบประเมินการสอน | พัฒนาเพื่อคุณภาพการศึกษา</p>
+            <p style="font-size: 0.8rem; margin-top: 0.5rem; opacity: 0.7;">
+                Version 2.0.0 | Last updated: <span id="last-updated"></span>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // 🔧 CONFIGURATION - แก้ไข URLs ให้ตรงกับระบบของคุณ
+        const CONFIG = {
+            API_URL: 'https://script.google.com/macros/s/AKfycbxI1-QQAoSNJa-o_sM3v8ak6x4KxTRybpMjDcX0vrWH6fiUrU-LiuM9KoNm3J8bIMSC/exec',
+            GOOGLE_SHEETS_URL: 'https://docs.google.com/spreadsheets/d/1CBVFQ2_U9nU6fnMhcRjNXG4duBSpLTYvBWLiT3AiJCI/edit',
+            SPREADSHEET_ID: '1TH1AbvtqOgmtCdnGguE_rxZ66Mu9A5JH',
+            VERSION: '2.0.0'
+        };
+        
+        // 📊 System Status Management
+        class SystemStatus {
+            constructor() {
+                this.connectionElement = document.getElementById('connection-status');
+                this.instructorElement = document.getElementById('instructor-count');
+                this.evaluationElement = document.getElementById('evaluation-count');
+                this.lastUpdatedElement = document.getElementById('last-updated');
+                
+                this.init();
+            }
+            
+            async init() {
+                console.log('🚀 Initializing system status check...');
+                this.setLastUpdated();
+                await this.checkSystemHealth();
+            }
+            
+            setLastUpdated() {
+                const now = new Date();
+                this.lastUpdatedElement.textContent = now.toLocaleString('th-TH');
+            }
+            
+            async checkSystemHealth() {
+                try {
+                    console.log('🔍 Testing connection to:', CONFIG.API_URL);
+                    
+                    const response = await fetch(CONFIG.API_URL, {
+                        method: 'POST',
+                        redirect: 'follow',
+                        body: JSON.stringify({ action: 'health' }),
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    const data = await response.json();
+                    console.log('✅ Health check response:', data);
+                    
+                    if (data.status === 'success') {
+                        this.updateConnectionStatus('success', 'เชื่อมต่อสำเร็จ');
+                        await this.loadInstructorCount();
+                        await this.estimateEvaluationCount(data);
+                    } else {
+                        throw new Error(data.message || 'Health check failed');
+                    }
+                    
+                } catch (error) {
+                    console.error('❌ System health check failed:', error);
+                    this.updateConnectionStatus('error', 'เชื่อมต่อไม่ได้');
+                    this.updateInstructorCount('error', 'ไม่สามารถโหลดได้');
+                    this.updateEvaluationCount('error', 'ไม่สามารถนับได้');
+                }
+            }
+            
+            async loadInstructorCount() {
+                try {
+                    const response = await fetch(CONFIG.API_URL, {
+                        method: 'POST',
+                        redirect: 'follow',
+                        body: JSON.stringify({ action: 'getInstructors' }),
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                    });
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        const instructors = data.data || {};
+                        const centerCount = Object.keys(instructors).length;
+                        let totalSlots = 0;
+                        
+                        Object.values(instructors).forEach(weeks => {
+                            Object.values(weeks).forEach(days => {
+                                Object.values(days).forEach(periods => {
+                                    Object.values(periods).forEach(() => {
+                                        totalSlots++;
+                                    });
+                                });
+                            });
+                        });
+                        
+                        this.updateInstructorCount('success', `${centerCount} ศูนย์, ${totalSlots} ช่วงสอน`);
+                    } else {
+                        throw new Error(data.message || 'Failed to load instructors');
+                    }
+                    
+                } catch (error) {
+                    console.error('❌ Failed to load instructor count:', error);
+                    this.updateInstructorCount('error', 'โหลดไม่ได้');
+                }
+            }
+            
+            async estimateEvaluationCount(healthData) {
+                try {
+                    const evaluationSheet = healthData.sheets?.find(sheet => sheet.name === 'evaluation');
+                    
+                    if (evaluationSheet && evaluationSheet.rows > 1) {
+                        const count = evaluationSheet.rows - 1;
+                        this.updateEvaluationCount('success', `${count} รายการ`);
+                    } else {
+                        this.updateEvaluationCount('success', '0 รายการ');
+                    }
+                    
+                } catch (error) {
+                    console.error('❌ Failed to estimate evaluation count:', error);
+                    this.updateEvaluationCount('error', 'นับไม่ได้');
+                }
+            }
+            
+            updateConnectionStatus(type, text) {
+                this.connectionElement.textContent = text;
+                this.connectionElement.className = `status-value status-${type}`;
+            }
+            
+            updateInstructorCount(type, text) {
+                this.instructorElement.textContent = text;
+                this.instructorElement.className = `status-value status-${type}`;
+            }
+            
+            updateEvaluationCount(type, text) {
+                this.evaluationElement.textContent = text;
+                this.evaluationElement.className = `status-value status-${type}`;
+            }
+        }
+        
+        function openGoogleSheets() {
+            if (!CONFIG.GOOGLE_SHEETS_URL || !CONFIG.GOOGLE_SHEETS_URL.startsWith('http')) {
+                alert(`⚠️ ยังไม่ได้ตั้งค่า Google Sheets URL หรือรูปแบบไม่ถูกต้อง`);
+                return;
+            }
+            window.open(CONFIG.GOOGLE_SHEETS_URL, '_blank');
+        }
+        
+        window.systemDebug = {
+            checkHealth: async () => {
+                const response = await fetch(CONFIG.API_URL, {
+                    method: 'POST',
+                    redirect: 'follow',
+                    body: JSON.stringify({ action: 'health' }),
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                });
+                const data = await response.json();
+                console.log('Health check result:', data);
+                return data;
+            },
+            
+            testConnection: async () => {
+                try {
+                    const response = await fetch(CONFIG.API_URL, {
+                        method: 'POST',
+                        redirect: 'follow',
+                        body: JSON.stringify({ action: 'getInstructors' }),
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                    });
+                    const data = await response.json();
+                    console.log('Connection test result:', data);
+                    return data;
+                } catch (error) {
+                    console.error('Connection test failed:', error);
+                    return { error: error.message };
+                }
+            },
+            
+            getConfig: () => {
+                console.log('Current configuration:', CONFIG);
+                return CONFIG;
+            },
+            
+            reloadStatus: () => {
+                window.location.reload();
+            }
+        };
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎓 Teaching Evaluation System v' + CONFIG.VERSION);
+            console.log('🔗 API URL:', CONFIG.API_URL);
+            
+            new SystemStatus();
+            
+            console.log('💡 Debug functions available via `systemDebug` object in console.');
+        });
+        
+        setInterval(() => {
+            console.log('🔄 Auto-refreshing system status...');
+            new SystemStatus();
+        }, 5 * 60 * 1000);
+        
+    </script>
+</body>
+</html>
