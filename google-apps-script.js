@@ -10,7 +10,19 @@
 function doGet(e) {
   try {
     console.log('=== doGet called ===');
-    console.log('Parameters:', e.parameter);
+    console.log('Parameters:', e ? e.parameter : 'No event object');
+    
+    // Check if e and e.parameter exist
+    if (!e || !e.parameter) {
+      console.log('No parameters provided, returning default response');
+      return createSuccessResponse({
+        message: 'GET request received successfully',
+        availableActions: ['health', 'getInstructors'],
+        timestamp: new Date().toISOString(),
+        version: '2.0.2',
+        note: 'No parameters provided'
+      });
+    }
     
     // Health check endpoint
     if (e.parameter.action === 'health') {
@@ -39,10 +51,10 @@ function doGet(e) {
 function doPost(e) {
   try {
     console.log('=== doPost called ===');
-    console.log('Post data exists:', !!e.postData);
+    console.log('Post data exists:', e && e.postData ? true : false);
     
     // Handle preflight OPTIONS request or empty POST
-    if (!e.postData || !e.postData.contents) {
+    if (!e || !e.postData || !e.postData.contents) {
       console.log('Handling preflight or empty request');
       return createCORSResponse();
     }
@@ -565,10 +577,10 @@ function testSubmitEvaluation() {
 function testSubmitEvaluationWithNames() {
   const testData = {
     action: 'submitEvaluation',
-    center: "บางพลัด",
-    week: "2",
-    day: "อาทิตย์",
-    period: "บ่าย",
+    center: "ลาดกระบัง",
+    week: "1",
+    day: "เสาร์",
+    period: "เช้า",
     instructor1: "อาจารย์ทดสอบชื่อ",
     instructor2: "อาจารย์ทดสอบนามสกุล",
     clarity: 4,
@@ -577,13 +589,48 @@ function testSubmitEvaluationWithNames() {
     punctuality: 5,
     satisfaction: 4,
     comment: "ทดสอบระบบรองรับชื่อ-นามสกุลภาษาอังกฤษ",
-    studentFirstName: "Alice",
-    studentLastName: "Smith"
+    studentFirstName: "John",
+    studentLastName: "Doe"
   };
   
-  const result = submitEvaluation(testData);
-  console.log('Submit evaluation with names result:', result.getContent());
-  return JSON.parse(result.getContent());
+  console.log('=== Testing Submit Evaluation with Names ===');
+  console.log('Test data:', testData);
+  
+  try {
+    const result = submitEvaluation(testData);
+    const resultContent = result.getContent();
+    console.log('Submit evaluation with names result:', resultContent);
+    
+    const parsedResult = JSON.parse(resultContent);
+    if (parsedResult.status === 'success') {
+      console.log('✅ Test passed! Data saved to row:', parsedResult.rowNumber);
+      console.log('✅ Student name data:', parsedResult.submittedData);
+    } else {
+      console.log('❌ Test failed:', parsedResult.message);
+    }
+    
+    return parsedResult;
+  } catch (error) {
+    console.error('❌ Test error:', error);
+    return { status: 'error', message: error.toString() };
+  }
+}
+
+// Quick test function for debugging
+function testQuick() {
+  console.log('=== Quick Test ===');
+  try {
+    const health = testHealthCheck();
+    console.log('Health check OK:', health.status === 'success');
+    
+    const nameTest = testSubmitEvaluationWithNames();
+    console.log('Name test OK:', nameTest.status === 'success');
+    
+    return { health: health, nameTest: nameTest };
+  } catch (error) {
+    console.error('Quick test error:', error);
+    return { error: error.toString() };
+  }
 }
 
 function testUpdateInstructors() {
