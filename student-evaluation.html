@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>แบบประเมินการสอน</title>
+  <title>แบบประเมินการสอน Power Supply</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -16,7 +16,7 @@
     
     body { 
       font-family: 'Kanit', sans-serif; 
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 25%, #3b82f6 50%, #60a5fa 75%, #f59e0b 100%);
       background-attachment: fixed;
       min-height: 100vh;
       display: flex;
@@ -24,6 +24,42 @@
       align-items: center;
       padding: 20px;
       position: relative;
+      overflow-x: hidden;
+    }
+    
+    /* Electric Circuit Animation Background */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(245, 158, 11, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 60%, rgba(96, 165, 250, 0.2) 0%, transparent 50%);
+      animation: electricFlow 8s ease-in-out infinite;
+      z-index: -1;
+    }
+    
+    @keyframes electricFlow {
+      0%, 100% { 
+        background-position: 0% 0%, 100% 100%, 50% 50%;
+        opacity: 0.3;
+      }
+      25% { 
+        background-position: 25% 25%, 75% 75%, 60% 40%;
+        opacity: 0.5;
+      }
+      50% { 
+        background-position: 50% 50%, 50% 50%, 70% 30%;
+        opacity: 0.7;
+      }
+      75% { 
+        background-position: 75% 75%, 25% 25%, 40% 60%;
+        opacity: 0.5;
+      }
     }
     
     .container { 
@@ -35,10 +71,27 @@
       width: 95%;
       box-shadow: 
         0 25px 50px rgba(0, 0, 0, 0.25),
-        0 0 0 1px rgba(255, 255, 255, 0.3);
+        0 0 0 1px rgba(255, 255, 255, 0.3),
+        0 0 30px rgba(59, 130, 246, 0.1);
       position: relative;
       z-index: 1;
       animation: slideUp 0.8s ease-out;
+      overflow: hidden;
+    }
+    
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(45deg, transparent 45%, rgba(59, 130, 246, 0.05) 50%, transparent 55%),
+        linear-gradient(-45deg, transparent 45%, rgba(245, 158, 11, 0.05) 50%, transparent 55%);
+      background-size: 40px 40px;
+      animation: circuitMove 25s linear infinite;
+      z-index: -1;
     }
     
     @keyframes slideUp {
@@ -58,20 +111,62 @@
     }
     
     .logo {
-      width: 60px;
-      height: 60px;
+      width: 80px;
+      height: 80px;
       margin: 0 auto 1rem;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 15px;
+      background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #f59e0b 100%);
+      border-radius: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+      box-shadow: 
+        0 15px 35px rgba(30, 64, 175, 0.4),
+        0 0 20px rgba(59, 130, 246, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+      animation: powerPulse 3s ease-in-out infinite;
+    }
+    
+    .logo::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent 30%, rgba(245, 158, 11, 0.3) 50%, transparent 70%);
+      transform: rotate(45deg);
+      animation: electricScan 4s linear infinite;
     }
     
     .logo i {
-      font-size: 1.8rem;
+      font-size: 2.2rem;
       color: white;
+      text-shadow: 0 0 10px rgba(245, 158, 11, 0.8);
+      z-index: 1;
+      position: relative;
+    }
+    
+    @keyframes powerPulse {
+      0%, 100% { 
+        transform: scale(1);
+        box-shadow: 
+          0 15px 35px rgba(30, 64, 175, 0.4),
+          0 0 20px rgba(59, 130, 246, 0.3);
+      }
+      50% { 
+        transform: scale(1.05);
+        box-shadow: 
+          0 20px 40px rgba(30, 64, 175, 0.6),
+          0 0 30px rgba(59, 130, 246, 0.5),
+          0 0 40px rgba(245, 158, 11, 0.3);
+      }
+    }
+    
+    @keyframes electricScan {
+      0% { transform: translate(-100%, -100%) rotate(45deg); }
+      100% { transform: translate(100%, 100%) rotate(45deg); }
     }
     
     h2 { 
@@ -79,23 +174,47 @@
       margin: 0;
       font-weight: 700;
       font-size: 1.8rem;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #f59e0b 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      text-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+      position: relative;
     }
     
-    /* Certificate Warning */
-    .certificate-warning {
-      background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
-      color: white;
-      padding: 1.5rem;
-      border-radius: 15px;
-      margin-bottom: 2rem;
-      text-align: center;
-      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
-      position: relative;
-      overflow: hidden;
+    h2::after {
+      content: '⚡';
+      position: absolute;
+      right: -30px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #f59e0b;
+      animation: sparkle 2s ease-in-out infinite;
+    }
+    
+    @keyframes sparkle {
+      0%, 100% { opacity: 0.5; transform: translateY(-50%) scale(1); }
+      50% { opacity: 1; transform: translateY(-50%) scale(1.2); }
+    }
+    
+    /* Circuit Pattern Animation */
+    .circuit-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(45deg, transparent 45%, rgba(59, 130, 246, 0.1) 50%, transparent 55%),
+        linear-gradient(-45deg, transparent 45%, rgba(245, 158, 11, 0.1) 50%, transparent 55%);
+      background-size: 30px 30px;
+      animation: circuitMove 20s linear infinite;
+      z-index: -1;
+    }
+    
+    @keyframes circuitMove {
+      0% { background-position: 0 0, 0 0; }
+      100% { background-position: 30px 30px, -30px 30px; }
     }
     
     .warning-icon {
@@ -151,10 +270,28 @@
     
     .progress-fill {
       height: 100%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #f59e0b 100%);
       width: 0%;
       transition: width 0.3s ease;
       border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .progress-fill::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      animation: progressSpark 2s linear infinite;
+    }
+    
+    @keyframes progressSpark {
+      0% { left: -100%; }
+      100% { left: 100%; }
     }
     
     .progress-text {
@@ -195,8 +332,9 @@
     }
     
     label i {
-      color: #667eea;
+      color: #1e40af;
       width: 20px;
+      text-shadow: 0 0 5px rgba(30, 64, 175, 0.3);
     }
     
     select, input[type="text"], textarea { 
@@ -216,8 +354,8 @@
     }
     
     select:focus, input[type="text"]:focus, textarea:focus { 
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      border-color: #1e40af;
+      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1), 0 0 10px rgba(59, 130, 246, 0.2);
     }
     
     .instructor-display {
@@ -290,9 +428,10 @@
     }
     
     .rating-label:hover {
-      border-color: #667eea;
-      background: #f0f4ff;
+      border-color: #1e40af;
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
       transform: scale(1.02);
+      box-shadow: 0 0 15px rgba(30, 64, 175, 0.3);
     }
     
     .rating-label:active {
@@ -300,11 +439,31 @@
     }
     
     .rating-item input[type="radio"]:checked + .rating-label {
-      background: #667eea;
-      border-color: #667eea;
+      background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+      border-color: #1e40af;
       color: white;
       transform: scale(1.05);
-      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+      box-shadow: 
+        0 5px 15px rgba(30, 64, 175, 0.4),
+        0 0 20px rgba(59, 130, 246, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .rating-item input[type="radio"]:checked + .rating-label::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: ratingGlow 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes ratingGlow {
+      0% { left: -100%; }
+      100% { left: 100%; }
     }
     
     .rating-number {
@@ -336,23 +495,44 @@
     button[type="submit"] { 
       width: 100%;
       padding: 16px 24px;
-      background: #667eea;
+      background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #f59e0b 100%);
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       font-size: 1.1rem;
       cursor: pointer;
       font-family: inherit;
       font-weight: 600;
-      transition: all 0.15s ease;
+      transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
+      box-shadow: 
+        0 8px 20px rgba(30, 64, 175, 0.3),
+        0 0 30px rgba(59, 130, 246, 0.2);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+    
+    button[type="submit"]::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.8s ease;
+    }
+    
+    button[type="submit"]:hover::before {
+      left: 100%;
     }
     
     button[type="submit"]:hover {
-      background: #5a6fd8;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 
+        0 15px 35px rgba(30, 64, 175, 0.4),
+        0 0 40px rgba(59, 130, 246, 0.3),
+        0 0 60px rgba(245, 158, 11, 0.2);
     }
     
     button[type="submit"]:active {
@@ -536,28 +716,18 @@
   <div class="container">
     <div class="header">
       <div class="logo">
-        <i class="fas fa-clipboard-check"></i>
+        <i class="fas fa-bolt"></i>
       </div>
-      <h2>แบบประเมินการสอน</h2>
+      <h2>แบบประเมินการสอน Power Supply</h2>
     </div>
     
-    <!-- Certificate Warning -->
-    <div class="certificate-warning">
-      <i class="fas fa-exclamation-triangle warning-icon"></i>
-      <div class="warning-text">⚠️ ข้อมูลสำคัญสำหรับใบเกียรติบัตร ⚠️</div>
-      <div class="warning-subtext">
-        • หากไม่ทำแบบประเมินการสอนให้ครบทุกครั้ง <strong>จะไม่ได้รับใบเกียติบัตร</strong><br>
-        • <strong>ต้องกรอกชื่อ-นามสกุลภาษาอังกฤษให้ถูกต้อง</strong> เพื่อใช้ในการออกใบเกียรติบัตร<br>
-        • ตรวจสอบการสะกดให้ถูกต้องก่อนส่ง เพราะจะไม่สามารถแก้ไขได้ภายหลัง
-      </div>
-    </div>
 
     <!-- Progress Indicator -->
     <div class="progress-indicator">
       <div class="progress-bar">
         <div class="progress-fill" id="progress-fill"></div>
       </div>
-      <div class="progress-text" id="progress-text">ขั้นตอนที่ 1 จาก 7: เลือกข้อมูลพื้นฐาน</div>
+      <div class="progress-text" id="progress-text">ขั้นตอนที่ 1 จาก 6: เลือกข้อมูลพื้นฐาน Power Supply</div>
     </div>
 
     <!-- Duplicate Warning -->
@@ -570,8 +740,8 @@
       <!-- Selection Dropdowns -->
       <div class="form-group">
         <label for="center">
-          <i class="fas fa-map-marker-alt"></i>
-          ศูนย์
+          <i class="fas fa-building"></i>
+          ศูนย์ฝึกอบรม
         </label>
         <select id="center" required>
           <option value="">เลือกศูนย์</option>
@@ -585,7 +755,7 @@
       <div class="form-group">
         <label for="week">
           <i class="fas fa-calendar-week"></i>
-          สัปดาห์
+          สัปดาห์ที่ (Power Supply Course)
         </label>
         <select id="week" required>
           <option value="">เลือกสัปดาห์</option>
@@ -614,8 +784,8 @@
       
       <div class="form-group">
         <label for="period">
-          <i class="fas fa-clock"></i>
-          ช่วงเวลา
+          <i class="fas fa-stopwatch"></i>
+          ช่วงเวลาเรียน
         </label>
         <select id="period" required>
           <option value="">เลือกช่วงเวลา</option>
@@ -624,34 +794,16 @@
         </select>
       </div>
       
-      <!-- Student Name Fields for Certificate -->
-      <div class="form-group">
-        <label for="student-first-name">
-          <i class="fas fa-user"></i>
-          ชื่อจริง (First Name) <span style="color: #e53e3e;">*</span>
-        </label>
-        <input type="text" id="student-first-name" placeholder="กรอกชื่อจริงเป็นภาษาอังกฤษ เช่น John" required 
-               pattern="[A-Za-z\s]+" title="กรุณากรอกเฉพาะตัวอักษรภาษาอังกฤษเท่านั้น">
-      </div>
-
-      <div class="form-group">
-        <label for="student-last-name">
-          <i class="fas fa-user"></i>
-          นามสกุล (Last Name) <span style="color: #e53e3e;">*</span>
-        </label>
-        <input type="text" id="student-last-name" placeholder="กรอกนามสกุลเป็นภาษาอังกฤษ เช่น Smith" required 
-               pattern="[A-Za-z\s]+" title="กรุณากรอกเฉพาะตัวอักษรภาษาอังกฤษเท่านั้น">
-      </div>
 
       <!-- Instructor Display -->
       <div class="form-group">
         <label>
-          <i class="fas fa-chalkboard-teacher"></i>
-          ผู้สอน
+          <i class="fas fa-user-tie"></i>
+          วิทยากร Power Supply
         </label>
         <div class="instructor-display">
           <div class="instructor-name" id="instructor1-display">
-            <span id="instructor1-text" class="instructor-empty">ยังไม่ได้เลือกตารางสอน</span>
+            <span id="instructor1-text" class="instructor-empty">ยังไม่ได้เลือกตารางสอน Power Supply</span>
           </div>
           <div class="instructor-name" id="instructor2-display" style="margin-top: 0.5rem;">
             <span id="instructor2-text" class="instructor-empty"></span>
@@ -664,8 +816,8 @@
       <!-- Rating Sections -->
       <div class="rating-section">
         <div class="rating-title">
-          <i class="fas fa-lightbulb"></i>
-          1. ความชัดเจนในการสอน
+          <i class="fas fa-brain"></i>
+          1. ความชัดเจนในการอธิบาย Power Supply
         </div>
         <div class="rating-group">
           <div class="rating-item">
@@ -708,8 +860,8 @@
       
       <div class="rating-section">
         <div class="rating-title">
-          <i class="fas fa-tasks"></i>
-          2. การเตรียมการสอน
+          <i class="fas fa-tools"></i>
+          2. การเตรียมอุปกรณ์การสอน
         </div>
         <div class="rating-group">
           <div class="rating-item">
@@ -752,8 +904,8 @@
       
       <div class="rating-section">
         <div class="rating-title">
-          <i class="fas fa-comments"></i>
-          3. การมีปฏิสัมพันธ์กับผู้เรียน
+          <i class="fas fa-users"></i>
+          3. การตอบคำถามและแลกเปลี่ยนประสบการณ์
         </div>
         <div class="rating-group">
           <div class="rating-item">
@@ -797,7 +949,7 @@
       <div class="rating-section">
         <div class="rating-title">
           <i class="fas fa-clock"></i>
-          4. การตรงต่อเวลา
+          4. การตรงต่อเวลาและบริหารเวลา
         </div>
         <div class="rating-group">
           <div class="rating-item">
@@ -840,8 +992,8 @@
       
       <div class="rating-section">
         <div class="rating-title">
-          <i class="fas fa-star"></i>
-          5. ความพึงพอใจโดยรวม
+          <i class="fas fa-battery-full"></i>
+          5. ความพึงพอใจโดยรวมกับ Power Supply Course
         </div>
         <div class="rating-group">
           <div class="rating-item">
@@ -884,16 +1036,16 @@
       
       <div class="form-group">
         <label for="comment">
-          <i class="fas fa-comment-alt"></i>
-          ข้อเสนอแนะเพิ่มเติม
+          <i class="fas fa-lightbulb"></i>
+          ข้อเสนอแนะเพิ่มเติมเกี่ยวกับ Power Supply Course
         </label>
-        <textarea id="comment" rows="4" placeholder="กรุณาแสดงความคิดเห็นเพิ่มเติม..."></textarea>
+        <textarea id="comment" rows="4" placeholder="แสดงความคิดเห็นเกี่ยวกับเนื้อหา Power Supply, การใช้งาน, หรือข้อเสนอแนะปรับปรุง..."></textarea>
       </div>
 
       <div class="submit-section">
         <button type="submit">
-          <i class="fas fa-paper-plane"></i>
-          ส่งแบบประเมิน
+          <i class="fas fa-bolt"></i>
+          ส่งแบบประเมิน Power Supply
         </button>
       </div>
     </form>
@@ -904,8 +1056,8 @@
       <div class="success-icon">
         <i class="fas fa-check-circle"></i>
       </div>
-      <div class="success-text">ส่งแบบประเมินเรียบร้อยแล้ว!</div>
-      <div class="success-subtext">ขอบคุณสำหรับการประเมิน การประเมินของคุณจะช่วยพัฒนาคุณภาพการสอน</div>
+      <div class="success-text">ส่งแบบประเมิน Power Supply เรียบร้อยแล้ว!</div>
+      <div class="success-subtext">ขอบคุณสำหรับการประเมิน การประเมินของคุณจะช่วยพัฒนาคุณภาพการสอน Power Supply</div>
       <div class="closing-message">
         <i class="fas fa-clock"></i>
         หน้าต่างจะปิดอัตโนมัติใน <span id="countdown">3</span> วินาที...
@@ -914,11 +1066,12 @@
   </div>
 
 <script>
-// 🔧 CONFIGURATION - แก้ไข URL ให้ตรงกับระบบของคุณ
+// 🔧 CONFIGURATION - Power Supply Course Evaluation System
 const CONFIG = {
   API_URL: 'https://script.google.com/macros/s/AKfycbxFkDpf-xmLv887QgAP1_shvghiPjQYzaZk3lgQwBdDHsMzjDs7tzJGPRH-IHX8mNtT/exec',
-  VERSION: '2.0.2',
-  DEBUG_MODE: true
+  VERSION: '2.0.1-PowerSupply',
+  DEBUG_MODE: true,
+  COURSE_NAME: 'Power Supply Course'
 };
 
 // 🏗️ Application State Management
@@ -973,19 +1126,6 @@ class EvaluationApp {
       this.updateProgress();
     });
 
-    // Name validation listeners
-    ['student-first-name', 'student-last-name'].forEach(fieldId => {
-      const field = document.getElementById(fieldId);
-      if (field) {
-        field.addEventListener('input', (e) => {
-          this.validateEnglishName(e.target);
-          this.updateProgress();
-        });
-        field.addEventListener('blur', (e) => {
-          this.validateEnglishName(e.target);
-        });
-      }
-    });
     
     // Form submission
     document.getElementById('evaluationForm').addEventListener('submit', (e) => {
@@ -1004,18 +1144,7 @@ class EvaluationApp {
       }
     });
     
-    // Check student name fields
-    const nameFields = ['student-first-name', 'student-last-name'];
-    const nameCompleted = nameFields.every(field => {
-      const element = document.getElementById(field);
-      return element && element.value.trim() && this.isValidEnglishName(element.value);
-    });
     
-    if (nameCompleted) {
-      completedSteps++;
-    }
-    
-    if (completedSteps === 5) completedSteps++;
     
     const ratingFields = ['clarity', 'preparation', 'interaction', 'punctuality', 'satisfaction'];
     const ratedFields = ratingFields.filter(field => 
@@ -1027,78 +1156,27 @@ class EvaluationApp {
     
     if (document.getElementById('comment').value.trim()) {
       completedSteps++;
-    } else if (completedSteps === 7) {
-      completedSteps = 7.5;
     }
     
-    // Update total steps to include name validation
-    this.totalSteps = 8;
+    this.totalSteps = 6;
     const progressPercentage = (completedSteps / this.totalSteps) * 100;
     this.progressFill.style.width = progressPercentage + '%';
     
     let stepText = '';
     if (completedSteps < 4) {
-      stepText = `ขั้นตอนที่ ${Math.floor(completedSteps) + 1} จาก ${this.totalSteps}: เลือกข้อมูลพื้นฐาน`;
+      stepText = `ขั้นตอนที่ ${Math.floor(completedSteps) + 1} จาก ${this.totalSteps}: เลือกข้อมูลพื้นฐาน Power Supply Course`;
     } else if (completedSteps === 4) {
-      stepText = `ขั้นตอนที่ 5 จาก ${this.totalSteps}: กรอกชื่อ-นามสกุลภาษาอังกฤษ`;
+      stepText = `ขั้นตอนที่ 5 จาก ${this.totalSteps}: ตรวจสอบวิทยากร Power Supply`;
     } else if (completedSteps === 5) {
-      stepText = `ขั้นตอนที่ 6 จาก ${this.totalSteps}: ตรวจสอบผู้สอน`;
-    } else if (completedSteps === 6) {
-      stepText = `ขั้นตอนที่ 7 จาก ${this.totalSteps}: ให้คะแนนประเมิน`;
-    } else if (completedSteps >= 7) {
-      stepText = `ขั้นตอนสุดท้าย - พร้อมส่งแบบประเมิน!`;
+      stepText = `ขั้นตอนที่ 6 จาก ${this.totalSteps}: ให้คะแนนประเมิน Power Supply Course`;
+    } else if (completedSteps >= 6) {
+      stepText = `ขั้นตอนสุดท้าย - พร้อมส่งแบบประเมิน Power Supply!`;
     }
     
     this.progressText.textContent = stepText;
     this.currentStep = Math.min(Math.ceil(completedSteps) + 1, this.totalSteps);
   }
 
-  validateEnglishName(field) {
-    const value = field.value.trim();
-    const isValid = this.isValidEnglishName(value);
-    
-    // Remove existing validation styling
-    field.style.borderColor = '';
-    field.style.backgroundColor = '';
-    
-    // Add visual feedback
-    if (value && !isValid) {
-      field.style.borderColor = '#e53e3e';
-      field.style.backgroundColor = '#fed7d7';
-      
-      // Show error message
-      let errorMsg = field.parentElement.querySelector('.name-error');
-      if (!errorMsg) {
-        errorMsg = document.createElement('div');
-        errorMsg.className = 'name-error';
-        errorMsg.style.color = '#e53e3e';
-        errorMsg.style.fontSize = '0.8rem';
-        errorMsg.style.marginTop = '0.25rem';
-        field.parentElement.appendChild(errorMsg);
-      }
-      errorMsg.textContent = 'กรุณากรอกเฉพาะตัวอักษรภาษาอังกฤษเท่านั้น';
-    } else {
-      // Remove error message if exists
-      const errorMsg = field.parentElement.querySelector('.name-error');
-      if (errorMsg) {
-        errorMsg.remove();
-      }
-      
-      if (value && isValid) {
-        field.style.borderColor = '#22c55e';
-        field.style.backgroundColor = '#dcfce7';
-      }
-    }
-    
-    return isValid;
-  }
-
-  isValidEnglishName(name) {
-    if (!name || !name.trim()) return false;
-    // Only allow English letters and spaces, no numbers or special characters
-    const englishNamePattern = /^[A-Za-z\s]+$/;
-    return englishNamePattern.test(name.trim());
-  }
   
   async fetchInstructors() {
     this.showMessage('success', 'กำลังโหลดข้อมูลผู้สอน...');
@@ -1154,15 +1232,15 @@ class EvaluationApp {
     
     if (center && week && day && period) {
         if (instructor1) {
-          instructor1Display.textContent = `ผู้สอน 1: ${instructor1}`;
+          instructor1Display.textContent = `วิทยากรหลัก: ${instructor1}`;
           instructor1Display.className = 'instructor-name';
         } else {
-          instructor1Display.textContent = 'ไม่มีข้อมูลผู้สอนสำหรับช่วงเวลานี้';
+          instructor1Display.textContent = 'ไม่มีข้อมูลวิทยากร Power Supply สำหรับช่วงเวลานี้';
           instructor1Display.className = 'instructor-empty';
         }
 
         if (instructor2) {
-          instructor2Display.textContent = `ผู้สอน 2: ${instructor2}`;
+          instructor2Display.textContent = `วิทยากรผู้ช่วย: ${instructor2}`;
           instructor2Display.className = 'instructor-name';
           instructor2Container.style.display = 'block';
         } else {
@@ -1170,7 +1248,7 @@ class EvaluationApp {
           instructor2Container.style.display = 'none';
         }
     } else {
-        instructor1Display.textContent = 'ยังไม่ได้เลือกตารางสอน';
+        instructor1Display.textContent = 'ยังไม่ได้เลือกตารางสอน Power Supply';
         instructor1Display.className = 'instructor-empty';
         instructor2Display.textContent = '';
         instructor2Container.style.display = 'block';
@@ -1236,26 +1314,15 @@ class EvaluationApp {
     payload.instructor2 = document.getElementById('instructor2').value;
     payload.comment = document.getElementById('comment').value;
     
-    // Student name data for certificate
-    payload.studentFirstName = document.getElementById('student-first-name').value.trim();
-    payload.studentLastName = document.getElementById('student-last-name').value.trim();
     
     // Validation checks
     if (!payload.center || !payload.week || !payload.day || !payload.period) {
       return this.showMessage('error', 'กรุณาเลือกข้อมูลให้ครบถ้วน (ศูนย์, สัปดาห์, วัน, ช่วงเวลา)');
     }
     
-    // Validate student names
-    if (!payload.studentFirstName || !payload.studentLastName) {
-      return this.showMessage('error', 'กรุณากรอกชื่อ-นามสกุลภาษาอังกฤษให้ครบถ้วน เพื่อใช้ในการออกใบเกียรติบัตร');
-    }
-    
-    if (!this.isValidEnglishName(payload.studentFirstName) || !this.isValidEnglishName(payload.studentLastName)) {
-      return this.showMessage('error', 'ชื่อ-นามสกุลต้องเป็นภาษาอังกฤษเท่านั้น (ไม่มีตัวเลขหรืออักขระพิเศษ)');
-    }
     
     if (!payload.instructor1 && !payload.instructor2) {
-      return this.showMessage('error', 'กรุณาเลือกตารางสอนที่มีผู้สอน');
+      return this.showMessage('error', 'กรุณาเลือกตารางสอนที่มีวิทยากร Power Supply');
     }
     
     let allRatingsProvided = true;
@@ -1269,13 +1336,13 @@ class EvaluationApp {
     });
     
     if (!allRatingsProvided) {
-      return this.showMessage('error', 'กรุณาให้คะแนนให้ครบทุกหัวข้อ (5 หัวข้อ)');
+      return this.showMessage('error', 'กรุณาให้คะแนนประเมิน Power Supply ให้ครบทุกหัวข้อ (5 หัวข้อ)');
     }
     
     const submitBtn = document.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerHTML;
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังส่ง...';
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังส่งประเมิน Power Supply...';
     
     try {
       const response = await fetch(CONFIG.API_URL, {
@@ -1357,9 +1424,10 @@ window.evaluationDebug = {
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('🎓 Teaching Evaluation System v' + CONFIG.VERSION);
+  console.log('⚡ Power Supply Course Evaluation System v' + CONFIG.VERSION);
   window.app = new EvaluationApp();
   console.log('💡 Debug functions available via `evaluationDebug` object in console.');
+  console.log('🔋 Course: ' + CONFIG.COURSE_NAME);
 });
 
 setInterval(() => {
@@ -1370,8 +1438,6 @@ setInterval(() => {
       day: document.getElementById('day').value,
       period: document.getElementById('period').value,
       comment: document.getElementById('comment').value,
-      studentFirstName: document.getElementById('student-first-name').value,
-      studentLastName: document.getElementById('student-last-name').value,
       timestamp: new Date().toISOString()
     };
     
@@ -1397,14 +1463,9 @@ window.addEventListener('load', () => {
     if (draft && confirm('พบข้อมูลแบบประเมินที่บันทึกไว้ ต้องการโหลดข้อมูลนั้นหรือไม่?')) {
       const data = JSON.parse(draft);
       
-      ['center', 'week', 'day', 'period', 'comment', 'studentFirstName', 'studentLastName'].forEach(field => {
+      ['center', 'week', 'day', 'period', 'comment'].forEach(field => {
         if (data[field]) {
-          let elementId = field;
-          // Map field names to element IDs
-          if (field === 'studentFirstName') elementId = 'student-first-name';
-          if (field === 'studentLastName') elementId = 'student-last-name';
-          
-          const element = document.getElementById(elementId);
+          const element = document.getElementById(field);
           if (element) {
             element.value = data[field];
             element.dispatchEvent(new Event('change'));

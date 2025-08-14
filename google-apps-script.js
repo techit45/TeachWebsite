@@ -1,6 +1,6 @@
 // 🔧 Google Apps Script Code - ระบบประเมินการสอน
-// Version: 2.0.2
-// Updated: 2025 - Added Student Name Support for Certificate
+// Version: 2.0.1
+// Updated: 2025 - Simplified evaluation system
 // วิธีใช้: แทนที่โค้ดทั้งหมดใน Google Apps Script Editor
 
 // =============================================================================
@@ -19,7 +19,7 @@ function doGet(e) {
         message: 'GET request received successfully',
         availableActions: ['health', 'getInstructors'],
         timestamp: new Date().toISOString(),
-        version: '2.0.2',
+        version: '2.0.1',
         note: 'No parameters provided'
       });
     }
@@ -39,7 +39,7 @@ function doGet(e) {
       message: 'GET request received successfully',
       availableActions: ['health', 'getInstructors'],
       timestamp: new Date().toISOString(),
-      version: '2.0.2'
+      version: '2.0.1'
     });
     
   } catch (error) {
@@ -191,19 +191,6 @@ function submitEvaluation(evaluationData) {
       }
     }
     
-    // Validate student names for certificate (required)
-    if (!evaluationData.studentFirstName || !evaluationData.studentLastName) {
-      throw new Error('Student first name and last name are required for certificate generation');
-    }
-    
-    // Validate English-only names
-    const englishNamePattern = /^[A-Za-z\s]+$/;
-    if (!englishNamePattern.test(evaluationData.studentFirstName)) {
-      throw new Error('Student first name must contain only English letters and spaces');
-    }
-    if (!englishNamePattern.test(evaluationData.studentLastName)) {
-      throw new Error('Student last name must contain only English letters and spaces');
-    }
     
     const spreadsheet = SpreadsheetApp.getActive();
     let evaluationSheet = spreadsheet.getSheetByName('evaluation');
@@ -231,9 +218,7 @@ function submitEvaluation(evaluationData) {
       parseInt(evaluationData.interaction) || 0,   // J: ปฏิสัมพันธ์
       parseInt(evaluationData.punctuality) || 0,   // K: ตรงต่อเวลา
       parseInt(evaluationData.satisfaction) || 0,  // L: พึงพอใจ
-      evaluationData.comment || '',                // M: ข้อเสนอแนะ
-      evaluationData.studentFirstName || '',       // N: ชื่อ (English)
-      evaluationData.studentLastName || ''         // O: นามสกุล (English)
+      evaluationData.comment || ''                 // M: ข้อเสนอแนะ
     ];
     
     console.log('Adding row data:', rowData);
@@ -248,7 +233,7 @@ function submitEvaluation(evaluationData) {
     console.log('Successfully submitted evaluation to row:', lastRow);
     
     return createSuccessResponse({
-      message: 'บันทึกการประเมินสำเร็จ รวมชื่อ-นามสกุลสำหรับเกียรติบัตร',
+      message: 'บันทึกการประเมินสำเร็จ',
       rowNumber: lastRow,
       submittedData: {
         center: evaluationData.center,
@@ -256,9 +241,7 @@ function submitEvaluation(evaluationData) {
         day: evaluationData.day,
         period: evaluationData.period,
         instructor1: evaluationData.instructor1,
-        instructor2: evaluationData.instructor2,
-        studentFirstName: evaluationData.studentFirstName,
-        studentLastName: evaluationData.studentLastName
+        instructor2: evaluationData.instructor2
       }
     });
     
@@ -375,7 +358,7 @@ function createInstructorsSheet(spreadsheet) {
 function createEvaluationSheet(spreadsheet) {
   const sheet = spreadsheet.insertSheet('evaluation');
   
-  // Create headers with student name support
+  // Create headers
   const headers = [
     'Timestamp',        // A
     'ศูนย์',            // B
@@ -389,9 +372,7 @@ function createEvaluationSheet(spreadsheet) {
     'ปฏิสัมพันธ์',      // J
     'ตรงต่อเวลา',       // K
     'พึงพอใจ',          // L
-    'ข้อเสนอแนะ',        // M
-    'ชื่อ (English)',    // N: First Name for Certificate
-    'นามสกุล (English)' // O: Last Name for Certificate
+    'ข้อเสนอแนะ'        // M
   ];
   
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
@@ -417,10 +398,8 @@ function createEvaluationSheet(spreadsheet) {
   sheet.setColumnWidth(11, 100); // ตรงต่อเวลา
   sheet.setColumnWidth(12, 100); // พึงพอใจ
   sheet.setColumnWidth(13, 250); // ข้อเสนอแนะ
-  sheet.setColumnWidth(14, 150); // ชื่อ (English)
-  sheet.setColumnWidth(15, 150); // นามสกุล (English)
   
-  console.log('Created evaluation sheet with student name support');
+  console.log('Created evaluation sheet');
   return sheet;
 }
 
@@ -475,11 +454,6 @@ function formatEvaluationRow(sheet, row, columnCount) {
     cell.setHorizontalAlignment('center');
   }
   
-  // Format student name columns (N-O) with light blue background
-  const nameRange = sheet.getRange(row, 14, 1, 2);
-  nameRange.setBackground('#e3f2fd'); // Light blue for certificate fields
-  nameRange.setBorder(true, true, true, true, true, true);
-  
   // Alternate row background for basic info
   if (row % 2 === 0) {
     sheet.getRange(row, 1, 1, 7).setBackground('#f8f9fa'); // Basic info columns
@@ -515,10 +489,10 @@ function createHealthResponse() {
   const spreadsheet = SpreadsheetApp.getActive();
   return createSuccessResponse({
     message: 'System is healthy',
-    version: '2.0.2',
+    version: '2.0.1',
     spreadsheetId: spreadsheet.getId(),
     spreadsheetName: spreadsheet.getName(),
-    features: ['instructor-management', 'evaluation-submission', 'student-names-for-certificate'],
+    features: ['instructor-management', 'evaluation-submission'],
     sheets: spreadsheet.getSheets().map(sheet => ({
       name: sheet.getName(),
       rows: sheet.getLastRow(),
@@ -564,9 +538,7 @@ function testSubmitEvaluation() {
     interaction: 5,
     punctuality: 4,
     satisfaction: 5,
-    comment: "ทดสอบจาก Google Apps Script Editor",
-    studentFirstName: "John", // Added for certificate
-    studentLastName: "Doe"    // Added for certificate
+    comment: "ทดสอบจาก Google Apps Script Editor"
   };
   
   const result = submitEvaluation(testData);
@@ -574,47 +546,6 @@ function testSubmitEvaluation() {
   return JSON.parse(result.getContent());
 }
 
-function testSubmitEvaluationWithNames() {
-  const testData = {
-    action: 'submitEvaluation',
-    center: "ลาดกระบัง",
-    week: "1",
-    day: "เสาร์",
-    period: "เช้า",
-    instructor1: "อาจารย์ทดสอบชื่อ",
-    instructor2: "อาจารย์ทดสอบนามสกุล",
-    clarity: 4,
-    preparation: 5,
-    interaction: 4,
-    punctuality: 5,
-    satisfaction: 4,
-    comment: "ทดสอบระบบรองรับชื่อ-นามสกุลภาษาอังกฤษ",
-    studentFirstName: "John",
-    studentLastName: "Doe"
-  };
-  
-  console.log('=== Testing Submit Evaluation with Names ===');
-  console.log('Test data:', testData);
-  
-  try {
-    const result = submitEvaluation(testData);
-    const resultContent = result.getContent();
-    console.log('Submit evaluation with names result:', resultContent);
-    
-    const parsedResult = JSON.parse(resultContent);
-    if (parsedResult.status === 'success') {
-      console.log('✅ Test passed! Data saved to row:', parsedResult.rowNumber);
-      console.log('✅ Student name data:', parsedResult.submittedData);
-    } else {
-      console.log('❌ Test failed:', parsedResult.message);
-    }
-    
-    return parsedResult;
-  } catch (error) {
-    console.error('❌ Test error:', error);
-    return { status: 'error', message: error.toString() };
-  }
-}
 
 // Quick test function for debugging
 function testQuick() {
@@ -623,10 +554,10 @@ function testQuick() {
     const health = testHealthCheck();
     console.log('Health check OK:', health.status === 'success');
     
-    const nameTest = testSubmitEvaluationWithNames();
-    console.log('Name test OK:', nameTest.status === 'success');
+    const evalTest = testSubmitEvaluation();
+    console.log('Evaluation test OK:', evalTest.status === 'success');
     
-    return { health: health, nameTest: nameTest };
+    return { health: health, evalTest: evalTest };
   } catch (error) {
     console.error('Quick test error:', error);
     return { error: error.toString() };
@@ -665,10 +596,6 @@ function runAllTests() {
     console.log('3. Testing Submit Evaluation...');
     const evaluation = testSubmitEvaluation();
     console.log('✅ Submit evaluation passed');
-    
-    console.log('4. Testing Submit Evaluation with Names...');
-    const evaluationWithNames = testSubmitEvaluationWithNames();
-    console.log('✅ Submit evaluation with names passed');
     
     console.log('=== All Tests Completed Successfully ===');
     return true;
@@ -739,14 +666,12 @@ function exportEvaluationsToCSV() {
 function onOpen() {
   // สร้าง custom menu ใน Google Sheets
   const ui = SpreadsheetApp.getUi();
-  ui.createMenu('🎓 ระบบประเมินการสอน v2.0.2')
+  ui.createMenu('🎓 ระบบประเมินการสอน v2.0.1')
     .addItem('📊 ตรวจสอบสถานะระบบ', 'showSystemStatus')
     .addItem('🧪 ทดสอบทุกฟังก์ชัน', 'runAllTests')
     .addSeparator()
     .addItem('📥 ดูข้อมูลผู้สอน', 'showInstructorsData')
     .addItem('📋 ส่งออกข้อมูลประเมิน', 'exportEvaluations')
-    .addSeparator()
-    .addItem('🎓 ทดสอบชื่อ-นามสกุลเกียรติบัตร', 'testSubmitEvaluationWithNames')
     .addSeparator()
     .addItem('🗑️ ล้างข้อมูลประเมิน', 'confirmClearEvaluations')
     .addToUi();
@@ -761,7 +686,6 @@ function showSystemStatus() {
     `📋 Spreadsheet: ${health.spreadsheetName}\n` +
     `🆔 ID: ${health.spreadsheetId}\n` +
     `📊 Sheets: ${health.sheets.length} แผ่น\n` +
-    `🎓 Features: รองรับชื่อ-นามสกุลเกียรติบัตร\n` +
     `🕐 เวลาตรวจสอบ: ${new Date().toLocaleString('th-TH')}`,
     ui.ButtonSet.OK);
 }
@@ -818,14 +742,12 @@ function confirmClearEvaluations() {
 // 📝 LOGGING - การบันทึก
 // =============================================================================
 
-console.log('🎓 Teaching Evaluation System v2.0.2 - Student Names Support - Loaded successfully');
+console.log('🎓 Teaching Evaluation System v2.0.1 - Simplified Version - Loaded successfully');
 console.log('📋 Available functions:');
 console.log('- doGet(e) / doPost(e): Main handlers');
 console.log('- getInstructors(): Get instructor data');
-console.log('- submitEvaluation(data): Submit evaluation with student names');
+console.log('- submitEvaluation(data): Submit evaluation');
 console.log('- updateInstructors(data): Update instructor data');
 console.log('- runAllTests(): Test all functions');
-console.log('- testSubmitEvaluationWithNames(): Test student names feature');
 console.log('- getSpreadsheetInfo(): Get spreadsheet details');
-console.log('🎓 NEW: Student names saved to Column N (First Name) and Column O (Last Name)');
-console.log('💡 Ready for deployment with certificate support!');
+console.log('💡 Ready for deployment!');
